@@ -21,3 +21,8 @@ tasks.withType<KotlinCompile>().configureEach {
         freeCompilerArgs = freeCompilerArgs + "-Xcontext-receivers"
     }
 }
+
+dependencies {
+//    implementation(libs.coroutines.core)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+}

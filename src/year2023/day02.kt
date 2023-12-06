@@ -1,3 +1,8 @@
+package year2023
+
+import util.println
+import util.readInput
+
 fun main() {
     fun part1(input: Map<Int, List<List<Map<String, Int>>>>): Int = input.filterValues { groups ->
         groups.all { cols ->

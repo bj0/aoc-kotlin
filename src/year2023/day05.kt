@@ -1,3 +1,9 @@
+package year2023
+
+import util.println
+import util.readInput
+import util.timedResult
+
 fun main() {
     data class Data(val seeds: List<Long>, val maps: List<List<Pair<LongRange, Long>>>)
 

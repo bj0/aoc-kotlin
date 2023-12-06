@@ -1,10 +1,15 @@
+package year2023
+
+import util.groupValues
+import util.println
+import util.readInput
+
 fun main() {
     fun part1(input: List<String>): Int {
-//        val pat = """\d""".toRegex()
+        val pat = """\d""".toRegex()
         return input.sumOf { line ->
-            "${line.first { it.isDigit() }}${line.last { it.isDigit() }}".toInt()
-//            val nums = pat.findAll(line).map(MatchResult::value)
-//            (nums.first() + nums.last()).toInt()
+            val nums = pat.findAll(line).map(MatchResult::value)
+            (nums.first() + nums.last()).toInt()
         }
     }
 
