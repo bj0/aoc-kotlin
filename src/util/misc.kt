@@ -23,6 +23,8 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
  */
 fun Any?.println() = println(this)
 
+fun <T> T.debug(prefix: String = ""): T = also { "$prefix$it".println() }
+
 /**
  * Convenience method to obtain the group values of a findall regex search of a string.
  */
@@ -40,7 +42,7 @@ fun String.groupValues(pattern: Regex): List<List<String>> {
 
 //fun String.deconValues(pattern: Regex):List<
 
-fun <T> timedResult(item:String="result", block: () -> T) {
+fun <T> timedResult(item: String = "result", block: () -> T) {
     val result: T
     val time = measureTime {
         result = block()

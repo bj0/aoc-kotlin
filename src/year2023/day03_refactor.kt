@@ -10,25 +10,9 @@ import kotlin.math.min
 
 fun main() {
 
-    Day03.solveAll(
-        input = InputProvider.Example
+    listOf(Day03, Day03AoK).solveAll(
+//        input = InputProvider.Example
     )
-
-//    fun part2(input: List<String>): Int = with(input.grid()) {
-//        find('*').map { p ->
-//            p.neighbors().mapNotNull { findNumber(it) }.toSet()
-//        }.filter { it.size == 2 }
-//            .map { it.map { (_, n) -> n.toInt() }.reduce(Int::times) }
-//            .sum()
-//    }
-//
-//    // test if implementation meets criteria from the description, like:
-//    val testInput = readInput("day03_test")
-//    check(part1(testInput) == 4361)
-//
-//    val input = readInput("day03")
-//    part1(input).println()
-//    part2(input).println()
 }
 
 object Day03 : PuzDSL({
@@ -47,6 +31,16 @@ object Day03 : PuzDSL({
                 p.neighbors().mapNotNull { findNumber(it) }
             }.toSet()
                 .sumOf { (_, n) -> n.toInt() }
+        }
+    }
+
+    part2(parser) { grid ->
+        with(grid) {
+            data.filterValues { it == '*' }.map { (p, _) ->
+                p.neighbors().mapNotNull { findNumber(it) }.distinct().toList()
+            }.filter { it.size == 2 }
+                .sumOf { (a, b) -> a.second.toInt() * b.second.toInt() }
+
         }
     }
 
@@ -79,17 +73,12 @@ object Day03 : PuzDSL({
     fun findNumber(point: Point): Pair<Point, String>? {
         if (data[point]?.isDigit() != true)
             return null
-        var p = point + Point(-1, 0)
-        while (data[p]?.isDigit() == true)
-            p += Point(-1, 0)
-        p += Point(1, 0)
-        val start = p
-        var num = ""
-        while (data[p]?.isDigit() == true) {
-            num += data[p]
-            p += Point(1, 0)
-        }
-        return start to num
+        val idx = (point.x downTo 0).asSequence().map { Point(it, point.y) }
+            .takeWhile { data[it]?.isDigit() == true }.toList().reversed() +
+                (point.x + 1..<Int.MAX_VALUE).asSequence().map { Point(it, point.y) }
+                    .takeWhile { data[it]?.isDigit() == true }
+
+        return idx.first() to idx.fold("") { acc, i -> acc + data[i]!! }
     }
 }
 
@@ -98,7 +87,7 @@ object Day03AoK : PuzDSL({
         lines.mapIndexed { y, line ->
             "\\d+".toRegex().findAll(line).filter { m ->
                 val sr = max(m.range.first - 1, 0)..min(m.range.last + 1, line.lastIndex)
-                (max(y-1, 0)..min(y+1, lines.lastIndex))
+                (max(y - 1, 0)..min(y + 1, lines.lastIndex))
                     .map { lines[it].substring(sr) }
                     .any { it.any { c -> c != '.' && !c.isDigit() } }
             }.sumOf { it.value.toInt() }
@@ -106,7 +95,7 @@ object Day03AoK : PuzDSL({
     }
     part2 {
         lines.mapIndexed { y, line ->
-            line.mapIndexedNotNull { idx, c -> idx.takeIf{ c == '*' } }.sumOf { x ->
+            line.mapIndexedNotNull { idx, c -> idx.takeIf { c == '*' } }.sumOf { x ->
                 (max(y - 1, 0)..min(y + 1, lines.lastIndex)).flatMap {
                     "\\d+".toRegex().findAll(lines[it]).filter { m ->
                         x in m.range || (x - 1) in m.range || (x + 1) in m.range
