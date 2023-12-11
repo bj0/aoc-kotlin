@@ -19,7 +19,7 @@ object Day04 : PuzDSL({
 
     //27059
     part1(parseWins) { wins ->
-        wins.filter { it > 0 }.sumOf { 2.0.pow(it - 1).toInt() }
+        wins.filter { it > 0 }.sumOf { 1 shl (it - 1) }
     }
 
     //5744979

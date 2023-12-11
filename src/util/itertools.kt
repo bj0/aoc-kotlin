@@ -1,7 +1,15 @@
 package util
 
+import kotlin.math.max
+import kotlin.math.min
+
 fun <T> Sequence<T>.repeat() = sequence { while (true) yieldAll(this@repeat) }
 fun <T> Sequence<T>.repeat(count: Int) = sequence { repeat(count) { yieldAll(this@repeat) } }
+
+fun <T, K> Grouping<T, K>.eachMax(selector: (T) -> Int): Map<K, Int> = fold(0) { acc, e -> max(acc, selector(e)) }
+fun <T, K> Grouping<T, K>.eachMin(selector: (T) -> Int): Map<K, Int> = fold(0) { acc, e -> min(acc, selector(e)) }
+fun <T : Comparable<T>, K> Grouping<T, K>.eachMax(): Map<K, T> = reduce { _, acc, e -> maxOf(acc, e) }
+fun <T : Comparable<T>, K> Grouping<T, K>.eachMin(): Map<K, T> = reduce { _, acc, e -> minOf(acc, e) }
 
 /**
  * Make an [Sequence] returning elements from the iterable and saving a copy of each.

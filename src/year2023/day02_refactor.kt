@@ -2,8 +2,8 @@ package year2023
 
 import util.InputProvider
 import util.PuzDSL
+import util.eachMax
 import util.solveAll
-import kotlin.math.max
 
 object Day02 : PuzDSL({
     data class Game(val id: Int, val shown: List<Map<String, Int>>)
@@ -18,6 +18,7 @@ object Day02 : PuzDSL({
         })
     }
 
+    //2061
     part1(parser) { games ->
         val limits = mapOf("red" to 12, "green" to 13, "blue" to 14)
         games.filter { game ->
@@ -25,12 +26,17 @@ object Day02 : PuzDSL({
         }.sumOf { it.id }
     }
 
+    // 72596
     part2(parser) { games ->
-        fun Game.minBag() = buildMap<String, Int> {
-            shown.flatMap { it.entries }.forEach { (color, n) ->
-                merge(color, n) { a, b -> max(a, b) }
-            }
-        }
+        fun Game.minBag() = shown.flatMap { it.entries }.groupingBy { it.key }
+            .eachMax { it.value }
+//            .fold(0) { acc, e -> max(acc, e.value) }
+//            .aggregate { _, acc: Int?, el, _ -> max(acc ?: 0, el.value) }
+//        fun Game.minBag() = buildMap<String, Int> {
+//            shown.flatMap { it.entries }.forEach { (color, n) ->
+//                merge(color, n) { a, b -> max(a, b) }
+//            }
+//        }
 
         fun Map<String, Int>.power() = values.fold(1, Int::times)
 

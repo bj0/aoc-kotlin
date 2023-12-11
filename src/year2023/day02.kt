@@ -20,7 +20,7 @@ fun main() {
 
     val pat = """(\d+) (\w+),?""".toRegex()
     fun List<String>.parsed() = this.mapIndexed { i, line ->
-        i + 1 to line.strip().split(";").map { group ->
+        i + 1 to line.trim().split(";").map { group ->
             pat.findAll(group).map {
                 val (n, col) = it.destructured
                 col to n.toInt()

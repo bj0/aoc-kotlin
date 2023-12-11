@@ -1,9 +1,6 @@
 package year2023
 
-import util.PuzDSL
-import util.lcm
-import util.repeat
-import util.solveAll
+import util.*
 
 fun main() {
     listOf(Day08).solveAll(
@@ -29,7 +26,7 @@ object Day08 : PuzDSL({
     part1(parser) { map ->
         map.directions.asSequence().repeat().runningFold("AAA") { cur, dir ->
             map.map[cur]!![dir]!!
-        }.takeWhile { it != "ZZZ" }.count()
+        }.indexOfFirst { it == "ZZZ" }
     }
 
     //12315788159977
@@ -37,10 +34,10 @@ object Day08 : PuzDSL({
 
         val starts = map.map.keys.filter { it.endsWith('A') }
 
-        starts.map { s ->
-            map.directions.asSequence().repeat().runningFold(s) {cur, dir ->
+        starts.map { start ->
+            map.directions.asSequence().repeat().runningFold(start) {cur, dir ->
                 map.map[cur]!![dir]!!
-            }.takeWhile { !it.endsWith("Z") }.count().toLong()
+            }.indexOfFirst { it.endsWith("Z") }.toLong()
         }.lcm()
     }
 })

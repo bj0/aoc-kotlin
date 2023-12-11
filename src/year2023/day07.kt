@@ -1,6 +1,5 @@
 package year2023
 
-import util.InputProvider
 import util.PuzDSL
 import util.solveAll
 
@@ -16,12 +15,12 @@ object Day07 : PuzDSL({
         val order = "23456789TJQKA"
 
         fun rank(hand: String): Int {
-            val counted = hand.asIterable().distinct()
-                .map { hand.count { c -> c == it } }
-                .sortedDescending()
-//            val counted = hand.groupBy { it }
-//                .map { (_, cs) -> cs.size }
+//            val counted = hand.asIterable().distinct()
+//                .map { hand.count { c -> c == it } }
 //                .sortedDescending()
+            val counted = hand.groupingBy { it }
+                .eachCount().values
+                .sortedDescending()
             if (counted.size < 2) return 6
             val (first, second) = counted
             return when {
@@ -41,15 +40,15 @@ object Day07 : PuzDSL({
             .thenComparator { a, b ->
                 a.first.zip(b.first).dropWhile { (x, y) -> x == y }
                     .first().let { (x, y) -> order.indexOf(x).compareTo(order.indexOf(y)) }
-            })
+            }
+        )
             .mapIndexed { i, (_, bid) -> (i + 1) * bid.toInt() }.sum()
     }
 
     part2 {
         fun type(hand: String): Int {
-            val counted = hand.groupBy { it }
-                .filter { it.key != 'J' }
-                .map { (_, cs) -> cs.size }
+            val counted = hand.filter { it != 'J' }.groupingBy { it }
+                .eachCount().values
                 .sortedDescending()
             val j = hand.count { it == 'J' }
             if (counted.size < 2) return 6
@@ -67,15 +66,13 @@ object Day07 : PuzDSL({
 
         val order = "J23456789TQKA"
 
+        fun String.toValue() = fold(0) { acc, c -> acc * order.length + order.indexOf(c) }
+
         lines.map { line ->
             val (hand, bid) = line.split(" ")
             hand to bid
         }.sortedWith(compareBy<Pair<String, String>> { (hand, _) -> type(hand) }
-            .thenBy { (hand, _) -> order.indexOf(hand[0]) }
-            .thenBy { (hand, _) -> order.indexOf(hand[1]) }
-            .thenBy { (hand, _) -> order.indexOf(hand[2]) }
-            .thenBy { (hand, _) -> order.indexOf(hand[3]) }
-            .thenBy { (hand, _) -> order.indexOf(hand[4]) })
+            .thenBy { (hand, _) -> hand.toValue() })
             .mapIndexed { i, (_, bid) -> (i + 1) * bid.toInt() }.sum()
     }
 })

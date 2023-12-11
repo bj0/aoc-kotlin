@@ -1,0 +1,14 @@
+# Produce a JVM library
+product:
+  type: lib
+  platforms: [jvm]
+
+
+settings:
+  kotlin:
+    freeCompilerArgs:
+      - "-Xcontext-receivers"
+
+
+dependencies:
+  - org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4
