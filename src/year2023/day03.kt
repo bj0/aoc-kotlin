@@ -1,78 +1,106 @@
 package year2023
 
-import util.println
-import util.readInput
-
-private const val NUM = "0123456789"
+import util.PuzDSL
+import util.solveAll
+import year2023.Day03.findNumber
+import year2023.Day03.neighbors
+import kotlin.math.max
+import kotlin.math.min
 
 fun main() {
-    fun part1(input: List<String>): Int = with(input.grid()) {
-        data.filterValues { !NUM.contains(it) }.flatMap { (p, _) ->
-            p.neighbors().mapNotNull { findNumber(it) }
-        }.toSet()
-            .sumOf { (_, n) -> n.toInt() }
-    }
 
-    fun part2(input: List<String>): Int = with(input.grid()) {
-        find('*').map { p ->
-            p.neighbors().mapNotNull { findNumber(it) }.toSet()
-        }.filter { it.size == 2 }
-            .map { it.map { (_, n) -> n.toInt() }.reduce(Int::times) }
-            .sum()
-    }
-
-    // test if implementation meets criteria from the description, like:
-    val testInput = readInput("day03_test")
-    check(part1(testInput) == 4361)
-
-    val input = readInput("day03")
-    part1(input).println()
-    part2(input).println()
+    listOf(Day03, Day03AoK).solveAll(
+//        input = InputProvider.Example
+    )
 }
 
-private data class Point(val x: Int, val y: Int)
+object Day03 : PuzDSL({
 
-private operator fun Point.plus(other: Point) = Point(x + other.x, y + other.y)
-
-private data class Grid<T>(val data: Map<Point, T>)
-
-private fun List<String>.grid(vararg ignore: String): Grid<Char> = Grid(this.flatMapIndexed { j, row ->
-    val ignore = if (ignore.isEmpty()) listOf(".") else ignore.toList()
-    row.mapIndexedNotNull { i, char ->
-        if (!ignore.contains(char.toString())) Point(i, j) to char else null
+    val parser = parser {
+        Grid(lines.flatMapIndexed { j, row ->
+            row.mapIndexedNotNull { i, char ->
+                if (char != '.') Point(i, j) to char else null
+            }
+        }.toMap())
     }
-}.toMap())
 
-private fun <T> Grid<T>.find(item: T): Sequence<Point> = sequence {
-    yieldAll(data.keys.filter { data[it] == item })
-}
+    part1(parser) { grid ->
+        with(grid) {
+            data.filterValues { !it.isDigit() }.flatMap { (p, _) ->
+                p.neighbors().mapNotNull { findNumber(it) }
+            }.toSet()
+                .sumOf { (_, n) -> n.toInt() }
+        }
+    }
 
-context(Grid<Char>)
-private fun Point.neighbors() = sequence {
-    (-1..1).forEach { i ->
-        (-1..1).forEach { j ->
-            if (!(i == 0 && j == 0)) {
-                val p = Point(x + i, y + j)
-                if (p in data)
-                    yield(p)
+    part2(parser) { grid ->
+        with(grid) {
+            data.filterValues { it == '*' }.map { (p, _) ->
+                p.neighbors().mapNotNull { findNumber(it) }.distinct().toList()
+            }.filter { it.size == 2 }
+                .sumOf { (a, b) -> a.second.toInt() * b.second.toInt() }
+
+        }
+    }
+
+}) {
+    data class Point(val x: Int, val y: Int)
+
+    operator fun Point.plus(other: Point) = Point(x + other.x, y + other.y)
+    operator fun Point.unaryMinus() = Point(-x, -y)
+    operator fun Point.minus(other: Point) = this + (-other)
+    data class Grid<T>(val data: Map<Point, T>)
+
+    fun <T> Grid<T>.find(item: T): Sequence<Point> = sequence {
+        yieldAll(data.keys.filter { data[it] == item })
+    }
+
+    context(Grid<Char>)
+    fun Point.neighbors() = sequence {
+        (-1..1).forEach { i ->
+            (-1..1).forEach { j ->
+                if (!(i == 0 && j == 0)) {
+                    val p = Point(x + i, y + j)
+                    if (p in data)
+                        yield(p)
+                }
             }
         }
     }
+
+    context(Grid<Char>)
+    fun findNumber(point: Point): Pair<Point, String>? {
+        if (data[point]?.isDigit() != true)
+            return null
+        val idx = (point.x downTo 0).asSequence().map { Point(it, point.y) }
+            .takeWhile { data[it]?.isDigit() == true }.toList().reversed() +
+                (point.x + 1..<Int.MAX_VALUE).asSequence().map { Point(it, point.y) }
+                    .takeWhile { data[it]?.isDigit() == true }
+
+        return idx.first() to idx.fold("") { acc, i -> acc + data[i]!! }
+    }
 }
 
-context(Grid<Char>)
-private fun findNumber(point: Point): Pair<Point, String>? {
-    if (!NUM.contains(data[point] ?: '.'))
-        return null
-    var p = point + Point(-1, 0)
-    while ((p in data) && NUM.contains(data[p]!!))
-        p += Point(-1, 0)
-    p += Point(1, 0)
-    val start = p
-    var num = ""
-    while ((p in data) && NUM.contains(data[p]!!)) {
-        num += data[p]
-        p += Point(1, 0)
+object Day03AoK : PuzDSL({
+    part1 {
+        lines.mapIndexed { y, line ->
+            "\\d+".toRegex().findAll(line).filter { m ->
+                val sr = max(m.range.first - 1, 0)..min(m.range.last + 1, line.lastIndex)
+                (max(y - 1, 0)..min(y + 1, lines.lastIndex))
+                    .map { lines[it].substring(sr) }
+                    .any { it.any { c -> c != '.' && !c.isDigit() } }
+            }.sumOf { it.value.toInt() }
+        }.sum()
     }
-    return start to num
-}
+    part2 {
+        lines.mapIndexed { y, line ->
+            line.mapIndexedNotNull { idx, c -> idx.takeIf { c == '*' } }.sumOf { x ->
+                (max(y - 1, 0)..min(y + 1, lines.lastIndex)).flatMap {
+                    "\\d+".toRegex().findAll(lines[it]).filter { m ->
+                        x in m.range || (x - 1) in m.range || (x + 1) in m.range
+                    }.map { it.value.toInt() }
+                }.takeIf { it.size == 2 }?.let { (a, b) -> a * b } ?: 0
+            }
+        }.sum()
+    }
+})

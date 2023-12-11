@@ -3,7 +3,7 @@ package year2023
 import util.*
 
 fun main() {
-    listOf(Day10).solveAll(
+    listOf(Day09).solveAll(
 //        InputProvider.Example
     )
 }

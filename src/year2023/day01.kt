@@ -1,19 +1,22 @@
 package year2023
 
+import util.PuzDSL
 import util.groupValues
-import util.println
-import util.readInput
+import util.solveAll
 
 fun main() {
-    fun part1(input: List<String>): Int {
-        val pat = """\d""".toRegex()
-        return input.sumOf { line ->
-            val nums = pat.findAll(line).map(MatchResult::value)
-            (nums.first() + nums.last()).toInt()
-        }
+    Day01.solveAll(
+//        input = InputProvider.Example
+    )
+}
+
+object Day01 : PuzDSL({
+
+    part1 {
+        lines.sumOf { line -> "${line.first { it.isDigit() }}${line.last { it.isDigit() }}".toInt() }
     }
 
-    fun part2(input: List<String>): Int {
+    part2 {
         val words = mapOf(
             "one" to "1",
             "two" to "2",
@@ -25,19 +28,10 @@ fun main() {
             "eight" to "8",
             "nine" to "9"
         )
-        val wat = """(?=(\d|${words.keys.joinToString("|")}))"""
-        val pat = wat.toRegex()
-        return input.sumOf {
+        val pat = """(?=(\d|${words.keys.joinToString("|")}))""".toRegex()
+        lines.sumOf {
             val nums = it.groupValues(pat).flatten()
             ((words[nums.first()] ?: nums.first()) + (words[nums.last()] ?: nums.last())).toInt()
         }
     }
-
-    // test if implementation meets criteria from the description, like:
-    val testInput = readInput("day01_test")
-    check(part1(testInput) == 142)
-
-    val input = readInput("day01")
-    part1(input).println()
-    part2(input).println()
-}
+})
