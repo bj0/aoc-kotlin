@@ -1,8 +1,16 @@
 package util
 
+import java.net.CookieManager
+import java.net.HttpCookie
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
+import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import kotlin.io.path.createParentDirectories
 import kotlin.io.path.isReadable
 import kotlin.io.path.readText
 
@@ -65,7 +73,8 @@ fun interface InputProvider {
         val Default = this
         override fun toString() = "puzzle"
         override fun forPuzzle(year: Int, day: Int) =
-            PuzzleInput.of(year, day)
+            PuzzleInput.of(findInputFile(year, day) ?: downloadInput(year, day))
+//            PuzzleInput.of(year, day)
 
         fun raw(content: String) = FixedInput(PuzzleInput.of(content))
         fun forFile(name: String) = fileInputProvider(name)
@@ -74,4 +83,38 @@ fun interface InputProvider {
     fun <R> withInput(content: String, block: context(PuzzleInput)() -> R) = PuzzleInput.of(content).run(block)
 
 
+}
+
+
+private fun downloadInput(year: Int, day: Int): Path {
+    val sessionFile = findInputFile(".session") ?: error("unable to download input, no session file found")
+    val dest = sessionFile.resolveSibling(inputFilePath(year, day, ""))
+    val sessionCookie = sessionFile.readText().trim()
+
+    val source = "https://adventofcode.com/$year/day/$day/input".let(URI::create)
+
+    println("WARN: Downloading $source to $dest")
+
+    val req = HttpRequest.newBuilder().GET().uri(source).build()
+    val res = HttpClient.newBuilder()
+        .cookieHandler(CookieManager().apply {
+            cookieStore.add(
+                URI.create("https://adventofcode.com"),
+                HttpCookie("session", sessionCookie).apply {
+                    version = 0
+                    path = "/"
+                    isHttpOnly = true
+                    secure = true
+                })
+        })
+        .build()
+        .send(req) {
+            if (it.statusCode() == 200) HttpResponse.BodySubscribers.ofFile(dest.createParentDirectories())
+            else HttpResponse.BodySubscribers.ofString(Charset.defaultCharset())
+        }
+
+    return when (val body = res.body()) {
+        is Path -> body
+        else -> error(body)
+    }
 }

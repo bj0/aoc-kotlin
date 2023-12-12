@@ -1,4 +1,5 @@
 .gradle
 .idea
+**/.session
 build
 input/**/*.txt
