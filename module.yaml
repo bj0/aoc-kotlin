@@ -12,3 +12,4 @@ settings:
 
 dependencies:
   - org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4
+  - io.arrow-kt:arrow-core:1.2.1

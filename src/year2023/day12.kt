@@ -1,16 +1,20 @@
 package year2023
 
+import arrow.core.MemoizedDeepRecursiveFunction
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import util.InputProvider
 import util.PuzDSL
-import util.debug
 import util.solveAll
 
 fun main() {
 //    "#.#....###".split('.').filter { it.isNotEmpty() }.debug()
-    listOf(Day12).solveAll(
+    listOf(Day12, Day12DRF).solveAll(
+//        InputProvider.Example
+//        InputProvider.raw("""#????????.#?#?????? 2,1,1,5,1""")
+    )
+    Day12MDRF.solveAll(
 //        InputProvider.Example
 //        InputProvider.raw("""#????????.#?#?????? 2,1,1,5,1""")
     )
@@ -19,49 +23,139 @@ fun main() {
 
 object Day12 : PuzDSL({
 
-    data class Input(val cond:String, val ecc:List<Int>)
-    val cache = mutableMapOf<Input, Long>()
-    fun count(cond: String, ecc: List<Int>): Long = cache.getOrPut(Input(cond, ecc)) {
-        if (ecc.isEmpty()) return@getOrPut if(cond.any { it == '#' }) 0L else 1L
-        if (ecc.sum() + ecc.size - 1 > cond.length) return@getOrPut 0L
-        val n = ecc.first()
-        if (cond.first() == '#') {
-            if (cond.take(n).any { it == '.' } || cond.drop(n).firstOrNull() == '#') return 0L
-            count(cond.drop(n + 1).trimStart('.'), ecc.drop(1))
-        }else {
-            // must be, ?, try #
-            val good = run {
-                if (cond.take(n).any { it == '.' } || cond.drop(n).firstOrNull() == '#') 0L
-                else count(cond.drop(n + 1).trimStart('.'), ecc.drop(1))
+    fun countPossible(cond: String, ecc: List<Int>): Long {
+        data class Input(val cond: String, val ecc: List<Int>)
+
+        buildMap {
+            fun innie(cond: String, ecc: List<Int>): Long = getOrPut(Input(cond, ecc)) {
+                val m = ecc.sum()
+                when {
+                    m + ecc.size - 1 > cond.length || m < cond.count { it == '#' } || m > cond.count { it != '.' } -> 0
+
+                    ecc.isEmpty() -> if (cond.any { it == '#' }) 0 else 1
+
+                    else -> {
+                        val n = ecc.first()
+                        if (cond.take(n).any { it == '.' } || cond.getOrNull(n) == '#') 0 else {
+                            innie(cond.drop(n + 1).trimStart('.'), ecc.drop(1))
+                        } + if (cond.startsWith('#')) 0 else {
+                            innie(cond.drop(1).trimStart('.'), ecc)
+                        }
+                    }
+                }
             }
-            val bad = run {
-                val cond2 = cond.drop(1).trimStart('.')
-                count(cond2, ecc)
-            }
-            good + bad
+            return innie(cond, ecc)
         }
     }
 
-    fun check(cond: String, ecc: String): Long {
-        return count(cond.trim('.'), ecc.split(",").map { it.toInt() })
+    fun countPossible(vararg input: String): Long {
+        return countPossible(input[0].trim('.'), input[1].split(",").map { it.toInt() })
     }
 
     part1 {
         lines.sumOf { line ->
-            val (cond, ecc) = line.split(' ')
-            check(cond, ecc)
+            countPossible(*line.split(' ').toTypedArray())
         }
     }
 
     part2 {
         lines.sumOf { line ->
             val (cond, ecc) = line.split(' ')
-            val cond2 = buildList { repeat(5) { add(cond) } }.joinToString("?")
-            val ecc2 = buildList { repeat(5) { add(ecc) } }.joinToString(",")
-            check(cond2, ecc2)
+            val unfoldedCond = buildList { repeat(5) { add(cond) } }.joinToString("?")
+            val unfoldecEcc = buildList { repeat(5) { add(ecc) } }.joinToString(",")
+            countPossible(unfoldedCond, unfoldecEcc)
+        }
+    }
+})
+
+object Day12DRF : PuzDSL({
+
+    data class Input(val cond: String, val ecc: List<Int>)
+
+    val cache = mutableMapOf<Input, Long>()
+    val countPossible = DeepRecursiveFunction<Input, Long> { input ->
+        cache.getOrPut(input) {
+//    val countPossible = MemoizedDeepRecursiveFunction<Input, Long> { input ->
+            val (cond, ecc) = input
+            val m = ecc.sum()
+            when {
+                m + ecc.size - 1 > cond.length || m < cond.count { it == '#' } || m > cond.count { it != '.' } -> 0
+
+                ecc.isEmpty() -> if (cond.any { it == '#' }) 0 else 1
+
+                else -> {
+                    val n = ecc.first()
+                    if (cond.take(n).any { it == '.' } || cond.getOrNull(n) == '#') 0 else {
+                        callRecursive(Input(cond.drop(n + 1).trimStart('.'), ecc.drop(1)))
+                    } + if (cond.startsWith('#')) 0 else {
+                        callRecursive(Input(cond.drop(1).trimStart('.'), ecc))
+                    }
+                }
+            }
         }
     }
 
+    fun countPossible(vararg input: String): Long {
+        return countPossible(Input(input[0].trim('.'), input[1].split(",").map { it.toInt() }))
+    }
+
+    part1 {
+        lines.sumOf { line ->
+            countPossible(*line.split(' ').toTypedArray())
+        }
+    }
+
+    part2 {
+        lines.sumOf { line ->
+            val (cond, ecc) = line.split(' ')
+            val unfoldedCond = buildList { repeat(5) { add(cond) } }.joinToString("?")
+            val unfoldecEcc = buildList { repeat(5) { add(ecc) } }.joinToString(",")
+            countPossible(unfoldedCond, unfoldecEcc)
+        }
+    }
+})
+
+object Day12MDRF : PuzDSL({
+
+    data class Input(val cond: String, val ecc: List<Int>)
+
+    val countPossible = MemoizedDeepRecursiveFunction<Input, Long> { input ->
+        val (cond, ecc) = input
+        val m = ecc.sum()
+        when {
+            m + ecc.size - 1 > cond.length || m < cond.count { it == '#' } || m > cond.count { it != '.' } -> 0
+
+            ecc.isEmpty() -> if (cond.any { it == '#' }) 0 else 1
+
+            else -> {
+                val n = ecc.first()
+                if (cond.take(n).any { it == '.' } || cond.getOrNull(n) == '#') 0 else {
+                    callRecursive(Input(cond.drop(n + 1).trimStart('.'), ecc.drop(1)))
+                } + if (cond.startsWith('#')) 0 else {
+                    callRecursive(Input(cond.drop(1).trimStart('.'), ecc))
+                }
+            }
+        }
+    }
+
+    fun countPossible(vararg input: String): Long {
+        return countPossible(Input(input[0].trim('.'), input[1].split(",").map { it.toInt() }))
+    }
+
+    part1 {
+        lines.sumOf { line ->
+            countPossible(*line.split(' ').toTypedArray())
+        }
+    }
+
+    part2 {
+        lines.sumOf { line ->
+            val (cond, ecc) = line.split(' ')
+            val unfoldedCond = buildList { repeat(5) { add(cond) } }.joinToString("?")
+            val unfoldecEcc = buildList { repeat(5) { add(ecc) } }.joinToString(",")
+            countPossible(unfoldedCond, unfoldecEcc)
+        }
+    }
 })
 
 object Day12TooSlow : PuzDSL({
