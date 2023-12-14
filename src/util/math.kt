@@ -58,43 +58,6 @@ fun testLcm() {
     measureTime { repeat(n) { lcm(a, b) } }.println() // fastest
     measureTime { repeat(n) { lcmBig(a, b) } }.println()
 }
-
-data class Point<T : Number>(val x: T, val y: T)
-
-infix fun <T : Number> Point<T>.mdist(other: Point<T>) = (other.x - x).absoluteValue + (other.y - y).absoluteValue
-
-@Suppress("UNCHECKED_CAST")
-private operator fun <T : Number> T.plus(x: T): T = when (this) {
-    is Int -> (this + (x as Int)) as T
-    is Long -> (this + (x as Long)) as T
-    is Double -> (this + (x as Double)) as T
-    is Float -> (this + (x as Float)) as T
-    else -> throw IllegalArgumentException("unsupported type")
-}
-
-@Suppress("UNCHECKED_CAST")
-private operator fun <T : Number> T.minus(x: T): T = when (this) {
-    is Int -> (this - (x as Int)) as T
-    is Long -> (this - (x as Long)) as T
-    is Double -> (this - (x as Double)) as T
-    is Float -> (this - (x as Float)) as T
-    else -> throw IllegalArgumentException("unsupported type")
-}
-
-@Suppress("UNCHECKED_CAST")
-val <T : Number> T.absoluteValue: T
-    get() = when (this) {
-        is Int -> absoluteValue as T
-        is Long -> absoluteValue as T
-        is Double -> absoluteValue as T
-        is Float -> absoluteValue as T
-        else -> throw IllegalArgumentException("unsupported type")
-    }
-
-data class PointL(val x: Long, val y: Long)
-
-infix fun PointL.mdist(other: PointL) = (other.x - x).absoluteValue + (other.y - y).absoluteValue
-
 fun main() {
     testLcm()
 }

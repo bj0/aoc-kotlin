@@ -1,6 +1,7 @@
 package util
 
 import kotlin.reflect.KProperty
+import kotlin.reflect.KProperty0
 import kotlin.time.Duration
 import kotlin.time.TimedValue
 import kotlin.time.measureTimedValue
@@ -20,13 +21,13 @@ fun interface Parser<T> {
     operator fun invoke(input: String) = with(PuzzleInput.of(input)) { parse() }
 }
 
-fun <R> LineParser(mapper: (line: String) -> R) = Parser { lines.map(mapper) }
+fun <R> lineParser(mapper: (line: String) -> R) = Parser { lines.map(mapper) }
 fun <T, R> Parser<List<T>>.map(mapper: (T) -> R) = map { it.map(mapper) }
 
 @SolutionDsl
 interface SolutionsScope<P1, P2> {
     fun <R> parser(block: Parser<R>) = block
-    fun <R> lineParser(mapper: (line: String) -> R) = LineParser(mapper)
+    fun <R> lineParser(mapper: (line: String) -> R) = util.lineParser(mapper)
 
     @SolutionDsl
     fun part1(solution: Solution<P1>)
@@ -52,7 +53,7 @@ fun interface Solution<T> {
     suspend fun PuzzleInput.solve(): T
 }
 
-private operator fun <P1, P2> PuzzleDefinition<P1, P2>.provideDelegate(thisRef: Any, property: KProperty<*>) = lazy {
+private operator fun <P1, P2> PuzzleDefinition<P1, P2>.provideDelegate(thisRef: Any?, property: KProperty<*>) = lazy {
     var part1 = Solution<P1> { TODO() }
     var part2 = Solution<P2> { TODO() }
     with(object : SolutionsScope<P1, P2> {
@@ -67,14 +68,43 @@ private operator fun <P1, P2> PuzzleDefinition<P1, P2>.provideDelegate(thisRef: 
     part1 to part2
 }
 
-abstract class PuzDSL(body: PuzzleDefinition<*, *>) {
-    private val solutions by body
+fun puzzle(body: PuzzleDefinition<*, *>): Puzzle<out Any?, out Any?> {
+    val solution by body
+    return Puzzle(solution.first, solution.second)
+}
 
+
+class Puzzle<P1, P2>(private val solution1: Solution<P1>, private val solution2: Solution<P2>) {
+    context(PuzzleInput)
+    suspend fun part1() = with(solution1) { solve() }
+
+    context(PuzzleInput)
+    suspend fun part2() = with(solution2) { solve() }
+}
+
+abstract class PuzDSL(body: PuzzleDefinition<*, *>) {
+    val solutions by body
     context(PuzzleInput)
     suspend fun part1() = with(solutions.first) { solve() }
 
     context(PuzzleInput)
     suspend fun part2() = with(solutions.second) { solve() }
+}
+
+fun KProperty0<Puzzle<*, *>>.solve(
+    input: InputProvider = InputProvider.Default
+) = listOf(this).solveAll(input)
+
+fun List<KProperty0<Puzzle<*, *>>>.solveAll(input: InputProvider = InputProvider.Default) = with(input) {
+    map { it.resolvePuzzle() }.solveAll()
+}
+
+fun KProperty0<Puzzle<*, *>>.resolvePuzzle(): Puz<Any?, Any?> {
+    val parts = javaClass.name.split('.')
+    val year = parts.first().substringAfter("year").toInt()
+    val day = parts.last().substringBefore('$').getInts().first()
+    val variant = name;
+    return get().resolvePuzzle(year, day, variant)
 }
 
 fun PuzDSL.solveAll(

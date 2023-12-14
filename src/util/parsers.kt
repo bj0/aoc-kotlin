@@ -7,8 +7,8 @@ fun String.splitIntsNotNull(vararg delimiters: String = arrayOf(" ")) = split(*d
 fun String.replace(vararg replacements: Pair<String, String>) = replacements.fold(this) { s, (a, b) -> s.replace(a, b) }
 
 object Parsers {
-    object Ints : Parser<List<Int>> by (LineParser(String::toIntOrNull).map { it.filterNotNull() })
-    object Longs : Parser<List<Long>> by (LineParser(String::toLongOrNull).map { it.filterNotNull() })
+    object Ints : Parser<List<Int>> by (lineParser(String::toIntOrNull).map { it.filterNotNull() })
+    object Longs : Parser<List<Long>> by (lineParser(String::toLongOrNull).map { it.filterNotNull() })
 }
 
 /**

@@ -1,16 +1,16 @@
+@file:Suppress("ObjectPropertyName")
+
 package year2023
 
-import util.PuzDSL
+import util.puzzle
 import util.solveAll
 import util.transpose
 
 fun main() {
-    listOf(Day13First, Day13).solveAll(
-//            InputProvider.Example
-    )
+    listOf(::solution, ::`first try`).solveAll()
 }
 
-object Day13 : PuzDSL({
+private val solution = puzzle {
     // this assumes only a single mirror line
     fun List<String>.findMirror(eq: List<String>.(List<String>) -> Boolean): Int =
         (1..lastIndex).find { n -> take(n).asReversed().eq(drop(n)) } ?: 0
@@ -32,9 +32,9 @@ object Day13 : PuzDSL({
     part2 {
         input.split("\n\n").map(String::lines).summarize(List<String>::almostSame)
     }
-})
+}
 
-object Day13First : PuzDSL({
+private val `first try` = puzzle {
     infix fun String.diff(other: String) = this.withIndex().count { (i, c) -> c != other[i] }
 
     fun List<String>.check(idx: Int) =
@@ -86,4 +86,4 @@ object Day13First : PuzDSL({
             100 * pat.findAlmostHorizontal() + pat.findAlmostVertical()
         }
     }
-})
+}

@@ -1,16 +1,12 @@
 package year2023
 
-import util.PuzDSL
-import util.groupValues
-import util.solveAll
+import util.*
 
 fun main() {
-    Day01.solveAll(
-//        input = InputProvider.Example
-    )
+    ::solution.solve()
 }
 
-object Day01 : PuzDSL({
+private val solution = puzzle {
 
     part1 {
         lines.sumOf { line -> "${line.first { it.isDigit() }}${line.last { it.isDigit() }}".toInt() }
@@ -34,4 +30,4 @@ object Day01 : PuzDSL({
             ((words[nums.first()] ?: nums.first()) + (words[nums.last()] ?: nums.last())).toInt()
         }
     }
-})
+}

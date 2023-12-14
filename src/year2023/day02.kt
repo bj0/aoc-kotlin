@@ -1,19 +1,14 @@
 package year2023
 
-import util.InputProvider
-import util.PuzDSL
-import util.eachMax
-import util.solveAll
+import util.*
 
 fun main() {
-    Day02.solveAll(
-        input = InputProvider.Example
-    )
+    ::solution.solve(InputProvider.Example)
 
-    listOf(Day02, Day02Old).solveAll()
+    listOf(::solution, ::old).solveAll()
 }
 
-object Day02 : PuzDSL({
+private val solution = puzzle {
     data class Game(val id: Int, val shown: List<Map<String, Int>>)
 
     val parser = lineParser { line ->
@@ -50,10 +45,10 @@ object Day02 : PuzDSL({
 
         games.sumOf { it.minBag().power() }
     }
-})
+}
 
-object Day02Old: PuzDSL({
-    val parser = parser{
+private val old = puzzle {
+    val parser = parser {
         val pat = """(\d+) (\w+),?""".toRegex()
         lines.mapIndexed { i, line ->
             i + 1 to line.trim().split(";").map { group ->
@@ -65,7 +60,7 @@ object Day02Old: PuzDSL({
         }.groupBy({ it.first }, { it.second })
     }
 
-    part1(parser){ games ->
+    part1(parser) { games ->
         games.filterValues { groups ->
             groups.all { cols ->
                 cols.maxOf { it["blue"] ?: 0 } <= 14 &&
@@ -75,11 +70,11 @@ object Day02Old: PuzDSL({
         }.keys.sum()
     }
 
-    part2(parser) {games ->
+    part2(parser) { games ->
         games.map { (_, groups) ->
             listOf("red", "green", "blue").map { c ->
                 groups.maxOf { g -> g.maxOf { col -> col[c] ?: 0 } }
             }.reduce(Int::times)
         }.sum()
     }
-})
+}

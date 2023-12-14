@@ -1,7 +1,6 @@
 package year2023
 
 import util.*
-import kotlin.math.pow
 
 fun main() {
     Day04.solveAll()
