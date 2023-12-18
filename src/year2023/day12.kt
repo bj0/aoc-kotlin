@@ -24,7 +24,7 @@ fun main() {
 
 }
 
-data class Input(val cond: String, val ecc: List<Int>)
+private data class Input(val cond: String, val ecc: List<Int>)
 
 object Day12 : PuzDSL({
 

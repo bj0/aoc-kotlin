@@ -29,6 +29,7 @@ private val solution = puzzle {
             }
         }
 
-        boxes.mapIndexed { i, m -> m.values.mapIndexed { j, fl -> fl * (j + 1) * (i + 1) }.sum() }.sum()
+        // 271384
+        boxes.foldIndexed(0) { i,acc, m -> acc + m.values.foldIndexed(0) { j, acc2, fl -> acc2 + fl * (j + 1) * (i + 1) } }
     }
 }
