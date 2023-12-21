@@ -19,6 +19,19 @@ fun lcm(a: Long, b: Long): Long = a / gcd(a, b) * b
 
 fun List<Long>.lcm() = reduce { acc, i -> lcm(acc, i) }
 
+/**
+ * chinese remainder theorem for 2 congruences
+ * N == x (mod n)
+ * N == a (mod m)
+ */
+tailrec fun crt(x: Long, n: Long, a: Long, m: Long): Long = if (x % m == a % m) x else crt(x + n, n, a % m, m)
+
+/**
+ * chinese remainder theorem, returns (N, lcm)
+ */
+fun Iterable<Pair<Long, Long>>.crt() = reduce { (x, n), (a, m) -> crt(x, n, a, m) to lcm(m, n) }
+
+fun Iterable<Int>.product() = fold(1) { acc, i -> acc * i }
 
 fun testLcm() {
     fun lcmMutable(a: Long, b: Long): Long {
@@ -58,6 +71,12 @@ fun testLcm() {
     measureTime { repeat(n) { lcm(a, b) } }.println() // fastest
     measureTime { repeat(n) { lcmBig(a, b) } }.println()
 }
+
 fun main() {
-    testLcm()
+//    testLcm()
+
+    listOf(
+        2767L to 3767L,
+        2779L to 3779L
+    ).crt().debug("crt:")
 }

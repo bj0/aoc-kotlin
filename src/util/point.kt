@@ -39,10 +39,12 @@ val Direction.pointL
 fun Point.move(dir: Direction, steps: Int = 0) = dir.point.let { p ->
     copy(x = x + steps * p.x, y = y + steps * p.y)
 }
+
 fun PointL.move(dir: Direction, steps: Int = 0) = dir.pointL.let { p ->
     copy(x = x + steps * p.x, y = y + steps * p.y)
 }
 
+fun Point.within(width: Int, height: Int) = x in 0..<width && y in 0..<height
 
 infix fun Int.point(y: Int) = Point(this, y)
 infix fun Long.point(y: Long) = PointL(this, y)

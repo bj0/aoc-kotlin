@@ -24,6 +24,9 @@ fun interface Parser<T> {
 fun <R> lineParser(mapper: (line: String) -> R) = Parser { lines.map(mapper) }
 fun <T, R> Parser<List<T>>.map(mapper: (T) -> R) = map { it.map(mapper) }
 
+fun <K, V> mapParser(mapper: MutableMap<K, V>.(line: String) -> Any?) =
+    Parser { buildMap { lines.forEach { mapper(it) } } }
+
 @SolutionDsl
 interface SolutionsScope<P1, P2> {
     fun <R> parser(block: Parser<R>) = block

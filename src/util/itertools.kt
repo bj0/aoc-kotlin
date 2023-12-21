@@ -3,6 +3,9 @@ package util
 import kotlin.math.max
 import kotlin.math.min
 
+val IntRange.size get() = last - first + 1
+val LongRange.size get() = last - first + 1
+
 fun <T> Sequence<T>.repeat() = sequence { while (true) yieldAll(this@repeat) }
 fun <T> Sequence<T>.repeat(count: Int) = sequence { repeat(count) { yieldAll(this@repeat) } }
 
