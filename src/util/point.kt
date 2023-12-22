@@ -7,13 +7,37 @@ data class Point(val x: Int, val y: Int) {
     companion object {
         val Zero = 0 point 0
     }
+
+    override fun toString() = "($x,$y)"
 }
 
 data class PointL(val x: Long, val y: Long) {
     companion object {
         val Zero = 0L point 0
     }
+
+    override fun toString() = "($x,$y)"
 }
+
+data class Point3(val x: Int, val y: Int, val z: Int) {
+    companion object {
+        operator fun invoke(pts: List<Int>) = Point3(pts[0], pts[1], pts[2])
+    }
+
+    override fun toString() = "($x,$y,$z)"
+}
+
+
+operator fun Point3.rangeTo(other: Point3) = sequence {
+    for (i in x..other.x) {
+        for (j in y..other.y) {
+            for (k in z..other.z) {
+                yield(Point3(i, j, k))
+            }
+        }
+    }
+}
+
 
 infix fun Point.mdist(other: Point) = (other.x - x).absoluteValue + (other.y - y).absoluteValue
 infix fun PointL.mdist(other: PointL) = (other.x - x).absoluteValue + (other.y - y).absoluteValue
