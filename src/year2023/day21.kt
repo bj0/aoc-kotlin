@@ -222,20 +222,6 @@ object Day21 {
 
 
             flood(start).let { ps ->
-//                val (evenCorners, oddCorners) = ps.filterKeys { p -> p mdist start > 65 }.values.groupBy { it % 2 }.values.toList()
-//                    .let { (a, b) ->
-//                        if (a.first() % 2 == 0) a.count() to b.count() else b.count() to a.count()
-//                    }
-//
-//                val (evenFill, oddFill) = ps.values.groupBy { it % 2 }.values.toList()
-//                    .let { (a, b) ->
-//                        if (a.first() % 2 == 0) a.count() to b.count() else b.count() to a.count()
-//                    }
-
-                 ps.filterKeys { p -> p mdist start > 65 }.values.countEven().debug("ev:")
-                 ps.filterKeys { p -> p mdist start > 65 }.values.countOdd().debug("od:")
-//                val evenCorners = ps.filter { (p, n) -> n > 65 && p mdist start > 65 }.values.countEven()
-//                val oddCorners = ps.filter { (p, n) -> n > 65 && p mdist start > 65 }.values.countOdd()
                 val evenCorners = ps.filterKeys { p -> p mdist start > 65 }.values.countEven()
                 val oddCorners = ps.filterKeys { p -> p mdist start > 65 }.values.countOdd()
                 val evenFill = ps.values.countEven()
@@ -244,9 +230,7 @@ object Day21 {
                 val N = 26501365L
                 val Q = (N - 65) / 131
 
-                println("q=$Q,ec=$evenCorners, oc=$oddCorners, ef=$evenFill, of=$oddFill")
-
-                (Q + 1) * (Q + 1) * oddFill + Q * Q * evenFill - (Q - 1) * oddCorners + Q * evenCorners - 610321885082978
+                (Q + 1) * (Q + 1) * oddFill + Q * Q * evenFill - (Q + 1) * oddCorners + Q * evenCorners
             }
 
         }
