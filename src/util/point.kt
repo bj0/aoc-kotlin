@@ -6,6 +6,8 @@ import kotlin.math.absoluteValue
 data class Point(val x: Int, val y: Int) {
     companion object {
         val Zero = 0 point 0
+        operator fun invoke(pts: List<Int>) = Point(pts[0], pts[1])
+        operator fun invoke(line: String): Point = Point(line.getIntList())
     }
 
     override fun toString() = "($x,$y)"
@@ -14,6 +16,8 @@ data class Point(val x: Int, val y: Int) {
 data class PointL(val x: Long, val y: Long) {
     companion object {
         val Zero = 0L point 0
+        operator fun invoke(pts: List<Long>) = PointL(pts[0], pts[1])
+        operator fun invoke(line: String): PointL = PointL(line.getLongList())
     }
 
     override fun toString() = "($x,$y)"
@@ -22,6 +26,16 @@ data class PointL(val x: Long, val y: Long) {
 data class Point3(val x: Int, val y: Int, val z: Int) {
     companion object {
         operator fun invoke(pts: List<Int>) = Point3(pts[0], pts[1], pts[2])
+        operator fun invoke(line: String): Point3 = Point3(line.getIntList())
+    }
+
+    override fun toString() = "($x,$y,$z)"
+}
+
+data class Point3L(val x: Long, val y: Long, val z: Long): Iterable<Long> by listOf(x, y, z) {
+    companion object {
+        operator fun invoke(pts: List<Long>) = Point3L(pts[0], pts[1], pts[2])
+        operator fun invoke(line: String): Point3L = Point3L(line.getLongList())
     }
 
     override fun toString() = "($x,$y,$z)"

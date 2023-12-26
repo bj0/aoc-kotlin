@@ -13,3 +13,10 @@ settings:
 dependencies:
   - org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4
   - io.arrow-kt:arrow-core:1.2.1
+#  - io.github.rchowell:dotlin:1.0.2
+  - io.ksmt:ksmt-core:0.5.6
+  - io.ksmt:ksmt-z3:0.5.6
+
+
+repositories:
+  - https://oss.sonatype.org/content/repositories/snapshots
