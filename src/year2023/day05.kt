@@ -27,7 +27,7 @@ fun main() {
                         val m = map.find { (r, _) -> x in r }
                         if (m == null) {
                             // not in map range
-                            val x0 = x;
+                            val x0 = x
                             while ((x < sr.last) && !map.any { (r, _) -> (x + 1) in r }) {
                                 x += 1
                             }
@@ -54,7 +54,7 @@ fun main() {
     }
 
     fun List<String>.parse(): Data {
-        val seeds = this[0].split(":")[1].strip().split(" ").map { it.toLong() }
+        val seeds = this[0].split(":")[1].trim().split(" ").map { it.toLong() }
         val maps = this.drop(2).joinToString("\n").split("\n\n").map { block ->
             block.split("\n").drop(1).map { row ->
                 val (d0, s0, n) = row.split(" ").map(String::toLong)
