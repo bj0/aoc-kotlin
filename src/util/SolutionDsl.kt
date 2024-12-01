@@ -2,6 +2,10 @@ package util
 
 import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty0
+import kotlin.reflect.KProperty1
+import kotlin.reflect.full.isSubtypeOf
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.typeOf
 import kotlin.time.Duration
 import kotlin.time.TimedValue
 import kotlin.time.measureTimedValue
@@ -14,7 +18,6 @@ fun interface Parser<T> {
     fun parse(): T
 
     fun <R> map(f: (T) -> R) = Parser { f(parse()) }
-    fun <R> andThen(f: (T) -> R) = map(f)
     context(PuzzleInput)
     operator fun invoke() = parse()
 
@@ -86,7 +89,7 @@ class Puzzle<P1, P2>(private val solution1: Solution<P1>, private val solution2:
 }
 
 abstract class PuzDSL(body: PuzzleDefinition<*, *>) {
-    val solutions by body
+    private val solutions by body
     context(PuzzleInput)
     suspend fun part1() = with(solutions.first) { solve() }
 
@@ -102,12 +105,30 @@ fun List<KProperty0<Puzzle<*, *>>>.solveAll(input: InputProvider = InputProvider
     map { it.resolvePuzzle() }.solveAll()
 }
 
-fun KProperty0<Puzzle<*, *>>.resolvePuzzle(): Puz<Any?, Any?> {
-    val parts = javaClass.name.split('.')
-    val year = parts.first().substringAfter("year").toInt()
-    val day = parts.last().substringBefore('$').getInts().first()
-    val variant = name;
-    return get().resolvePuzzle(year, day, variant)
+// use reflection to pull out the solutions from an object
+fun <T : Any> T.solveAll(input: InputProvider = InputProvider.Default) {
+    val solutions = this::class.memberProperties.filter {
+        it.returnType.isSubtypeOf(typeOf<Puzzle<*, *>>())
+    }.map {
+        val key = javaClass.name.resolvePuzzleKey(it.name)
+        (it as KProperty1<T, Puzzle<*, *>>).get(this).resolvePuzzle(key.year, key.day, key.variant)
+    }
+    with(input) { solutions.solveAll() }
+}
+
+// pull year and day out of property0 name and then get it
+private fun KProperty0<Puzzle<*, *>>.resolvePuzzle(): Puz<Any?, Any?> {
+    val key = javaClass.name.resolvePuzzleKey(name)
+    return get().resolvePuzzle(key.year, key.day, key.variant)
+}
+
+// pull out year and day from a string, pass in variant
+private fun String.resolvePuzzleKey(variant: String): PuzKey = split('.').let { parts ->
+    PuzKey.of(
+        parts.first().substringAfter("year").toInt(),
+        parts.last().substringBefore('$').getInts().first(),
+        variant
+    )
 }
 
 fun PuzDSL.solveAll(
