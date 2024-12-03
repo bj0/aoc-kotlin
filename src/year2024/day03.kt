@@ -5,26 +5,30 @@ import util.*
 
 fun main() {
     // fold is fastest, recursive is ~40x slower
-    listOf(Day3::solution, Day3::fold, Day3::recursive).solveAll()
+//    listOf(Day3::solution, Day3::fold, Day3::recursive).solveAll()
+    Day3.solveAll()
 }
 
 object Day3 : Solutions {
+    private const val MUL = """mul\(\d+,\d+\)"""
+    private const val DO = """do\(\)"""
+    private const val DONT = """don't\(\)"""
+
 
     val solution = puzzle {
-
         part1 {
-            """mul\(\d+,\d+\)""".toRegex().findAll(input)
+            MUL.toRegex().findAll(input)
                 .sumOf { it.value.getIntList().product() }
         }
 
         part2 {
             var on = true
-            """(mul\(\d+,\d+\)|do\(\)|don't\(\))""".toRegex().findAll(input)
+            """($DONT|$DO|$MUL)""".toRegex().findAll(input)
                 .sumOf {
-                    when {
-                        it.value.startsWith("mul") -> if (on) it.value.getIntList().product() else 0
-                        it.value.startsWith("don") -> 0.also { on = false }
-                        else -> 0.also { on = true }
+                    when (it.groupValues[1]) {
+                        "don't()" -> 0.also { on = false }
+                        "do()" -> 0.also { on = true }
+                        else -> if (on) it.value.getIntList().product() else 0
                     }
                 }
         }
@@ -32,12 +36,12 @@ object Day3 : Solutions {
 
     val fold = puzzle {
         part2 {
-            """(mul\(\d+,\d+\)|do\(\)|don't\(\))""".toRegex().findAll(input)
+            """($MUL|$DONT|$DO)""".toRegex().findAll(input)
                 .fold(true to 0) { (on, s), m ->
-                    when {
-                        m.value.startsWith("mul") -> on to if (on) s + m.value.getIntList().product() else s
-                        m.value.startsWith("don") -> false to s
-                        else -> true to s
+                    when (m.groupValues[1]) {
+                        "don't()" -> false to s
+                        "do()" -> true to s
+                        else -> on to if (on) s + m.value.getIntList().product() else s
                     }
                 }.second
         }
@@ -46,15 +50,29 @@ object Day3 : Solutions {
     val recursive = puzzle {
         part2 {
             tailrec fun munch(matches: List<MatchResult>, on: Boolean = true, sum: Int = 0): Int {
-                val res = matches.firstOrNull()?.value ?: return sum
+                val res = matches.firstOrNull() ?: return sum
                 val next = matches.subList(1, matches.size)
-                return when {
-                    "mul" in res -> munch(next, on, if (on) sum + res.getIntList().product() else sum)
-                    "'" in res -> munch(next, false, sum)
-                    else -> munch(next, true, sum)
+                return when (res.groupValues[1]) {
+                    "don't()" -> munch(next, false, sum)
+                    "do()" -> munch(next, true, sum)
+                    else -> munch(next, on, if (on) sum + res.value.getIntList().product() else sum)
                 }
             }
-            munch("""(mul\(\d+,\d+\)|do\(\)|don't\(\))""".toRegex().findAll(input).toList())
+            munch("""($MUL|$DONT|$DO)""".toRegex().findAll(input).toList())
+        }
+    }
+
+    val trick = puzzle {
+        part2 {
+            """$DONT.*?($DO|$)|($MUL)""".toRegex(RegexOption.DOT_MATCHES_ALL).findAll(input)
+                .sumOf { m -> m.groupValues[2].getIntList().product() }
+        }
+    }
+
+    val trick2 = puzzle {
+        part2 {
+            """$DONT.*?($DO|$)|mul\((\d+),(\d+)\)""".toRegex(RegexOption.DOT_MATCHES_ALL).findAll(input)
+                .sumOf { m -> (m.groupValues[2].toIntOrNull() ?: 0) * (m.groupValues[3].toIntOrNull() ?: 0) }
         }
     }
 }
