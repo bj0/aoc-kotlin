@@ -22,7 +22,7 @@ object Day3 : Solutions {
             """(mul\(\d+,\d+\)|do\(\)|don't\(\))""".toRegex().findAll(input)
                 .sumOf {
                     when {
-                        it.value.startsWith("mul") && on -> it.value.getIntList().product()
+                        it.value.startsWith("mul") -> if (on) it.value.getIntList().product() else 0
                         it.value.startsWith("don") -> 0.also { on = false }
                         else -> 0.also { on = true }
                     }
@@ -35,7 +35,7 @@ object Day3 : Solutions {
             """(mul\(\d+,\d+\)|do\(\)|don't\(\))""".toRegex().findAll(input)
                 .fold(true to 0) { (on, s), m ->
                     when {
-                        m.value.startsWith("mul") && on -> on to s + m.value.getIntList().product()
+                        m.value.startsWith("mul") -> on to if (on) s + m.value.getIntList().product() else s
                         m.value.startsWith("don") -> false to s
                         else -> true to s
                     }
@@ -45,15 +45,16 @@ object Day3 : Solutions {
 
     val recursive = puzzle {
         part2 {
-            tailrec fun munch(matches: Sequence<MatchResult>, on: Boolean = true, sum: Int = 0): Int {
+            tailrec fun munch(matches: List<MatchResult>, on: Boolean = true, sum: Int = 0): Int {
                 val res = matches.firstOrNull()?.value ?: return sum
+                val next = matches.subList(1, matches.size)
                 return when {
-                    "mul" in res && on -> munch(matches.drop(1), true, sum + res.getIntList().product())
-                    "'" in res -> munch(matches.drop(1), false, sum)
-                    else -> munch(matches.drop(1), true, sum)
+                    "mul" in res -> munch(next, on, if (on) sum + res.getIntList().product() else sum)
+                    "'" in res -> munch(next, false, sum)
+                    else -> munch(next, true, sum)
                 }
             }
-            munch("""(mul\(\d+,\d+\)|do\(\)|don't\(\))""".toRegex().findAll(input))
+            munch("""(mul\(\d+,\d+\)|do\(\)|don't\(\))""".toRegex().findAll(input).toList())
         }
     }
 }
