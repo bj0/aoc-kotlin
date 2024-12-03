@@ -31,7 +31,7 @@ tailrec fun crt(x: Long, n: Long, a: Long, m: Long): Long = if (x % m == a % m) 
  */
 fun Iterable<Pair<Long, Long>>.crt() = reduce { (x, n), (a, m) -> crt(x, n, a, m) to lcm(m, n) }
 
-fun Iterable<Int>.product() = fold(1) { acc, i -> acc * i }
+fun Iterable<Int>.product() = if (none()) 0 else fold(1) { acc, i -> acc * i }
 
 fun testLcm() {
     fun lcmMutable(a: Long, b: Long): Long {
