@@ -95,8 +95,8 @@ object Day22 {
         }
     }
 
-    private fun settle(cubes: Map<Point3, Brick>): Map<Point3, Brick> {
-        fun step(cubes: Map<Point3, Brick>): Map<Point3, Brick> {
+    private fun settle(cubes: Map<IntPoint3, Brick>): Map<IntPoint3, Brick> {
+        fun step(cubes: Map<IntPoint3, Brick>): Map<IntPoint3, Brick> {
             return buildMap {
                 putAll(cubes)
                 for (block in values.sortedBy { it.cubes.minOf { c -> c.z } }) {
@@ -114,18 +114,18 @@ object Day22 {
     }
 
 
-    val Point3.down get() = copy(z = z - 1)
+    val IntPoint3.down get() = copy(z = z - 1)
 
-    data class Brick(val cubes: List<Point3>) {
+    data class Brick(val cubes: List<IntPoint3>) {
         fun moveDown() = copy(cubes = cubes.map { p -> p.down })
 
         companion object {
             fun from(ends: List<List<Int>>): Brick {
-                val (start, finish) = ends.map { Point3(it) }
+                val (start, finish) = ends.map { IntPoint3(it) }
                 return from(start, finish)
             }
 
-            private fun from(start: Point3, end: Point3) = Brick((start..end).toList())
+            private fun from(start: IntPoint3, end: IntPoint3) = Brick((start..end).toList())
         }
     }
 

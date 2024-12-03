@@ -118,7 +118,7 @@ private val solution = puzzle {
     val parser = parser { Table(lines) }
 
     fun Table.roll() = Table(buildList {
-        val moved = mutableSetOf<Point>()
+        val moved = mutableSetOf<IntPoint>()
         map.forEachIndexed { j, line ->
             add(buildString {
                 line.forEachIndexed { i, c ->
@@ -178,13 +178,13 @@ val `first try` = puzzle {
         buildMap {
             lines.forEachIndexed { row, line ->
                 line.forEachIndexed { col, c ->
-                    put(Point(col, row), c)
+                    put(IntPoint(col, row), c)
                 }
             }
         }
     }
 
-    fun Map<Point, Char>.step(dir: Point.() -> Point = { up }) = buildMap {
+    fun Map<IntPoint, Char>.step(dir: IntPoint.() -> IntPoint = { up }) = buildMap {
         this@step.keys.forEach { p ->
             when {
                 this@step[p] == 'O' && this@step[p.dir()] == '.' -> {
@@ -209,17 +209,17 @@ val `first try` = puzzle {
         }
     }
 
-    fun Map<Point, Char>.tilt(dir: Point.() -> Point = { up }) =
+    fun Map<IntPoint, Char>.tilt(dir: IntPoint.() -> IntPoint = { up }) =
         generateSequence(this) { it.step(dir) }.zipWithNext().find { (a, b) -> a == b }!!.first
 
-    fun cycle(map: Map<Point, Char>) =
+    fun cycle(map: Map<IntPoint, Char>) =
         map.tilt { up }.tilt { left }.tilt { down }.tilt { right }
 
     part2(parser) { map ->
         val height = map.keys.maxOf { it.y }
 
         var cur = map
-        val cache = mutableMapOf<Map<Point, Char>, Long>()
+        val cache = mutableMapOf<Map<IntPoint, Char>, Long>()
 
         var i = 0L
         val max = 1_000_000_000L

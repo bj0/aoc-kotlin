@@ -106,7 +106,8 @@ fun List<KProperty0<Puzzle<*, *>>>.solveAll(input: InputProvider = InputProvider
 }
 
 // use reflection to pull out the solutions from an object
-fun <T : Any> T.solveAll(input: InputProvider = InputProvider.Default) {
+interface Solutions
+fun <T : Solutions> T.solveAll(input: InputProvider = InputProvider.Default) {
     val solutions = this::class.memberProperties.filter {
         it.returnType.isSubtypeOf(typeOf<Puzzle<*, *>>())
     }.map {

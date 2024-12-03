@@ -43,8 +43,8 @@ object Day21 {
 
         part1(parser) { (plots, start) ->
             val target = 64
-            val cache = mutableSetOf<Pair<Int, Point>>()
-            val hits = mutableSetOf<Point>()
+            val cache = mutableSetOf<Pair<Int, IntPoint>>()
+            val hits = mutableSetOf<IntPoint>()
 
             val q = ArrayDeque(listOf(start to 0))
             while (q.isNotEmpty()) {
@@ -72,13 +72,13 @@ object Day21 {
             val width = plots.maxOf { it.x } + 1
             val height = plots.maxOf { it.y } + 1
 
-            fun isValid(point: Point): Boolean {
+            fun isValid(point: IntPoint): Boolean {
                 val (x, y) = point
                 return (floorMod(x, width) point floorMod(y, height)) in plots
 
             }
 
-            fun flood(start: Point, to: Int): MutableMap<Point, Int> {
+            fun flood(start: IntPoint, to: Int): MutableMap<IntPoint, Int> {
                 val seen = mutableMapOf(start to 0)
 
                 val q = ArrayDeque(listOf(start to 0))
@@ -137,13 +137,13 @@ object Day21 {
             val width = plots.maxOf { it.x } + 1
             val height = plots.maxOf { it.y } + 1
 
-            fun isValid(point: Point): Boolean {
+            fun isValid(point: IntPoint): Boolean {
                 val (x, y) = point
                 return (floorMod(x, width) point floorMod(y, height)) in plots
 
             }
 
-            fun flood(start: Point, to: Int): MutableMap<Point, Int> {
+            fun flood(start: IntPoint, to: Int): MutableMap<IntPoint, Int> {
                 val seen = mutableMapOf(start to 0)
 
                 val q = ArrayDeque(listOf(start to 0))
@@ -202,7 +202,7 @@ object Day21 {
         part2(parser) { (plots, start) ->
             // counting corners
 
-            fun flood(start: Point): MutableMap<Point, Int> {
+            fun flood(start: IntPoint): MutableMap<IntPoint, Int> {
                 val seen = mutableMapOf(start to 0)
                 val q = ArrayDeque(listOf(start to 0))
                 while (q.isNotEmpty()) {

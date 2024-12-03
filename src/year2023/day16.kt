@@ -33,7 +33,7 @@ private val solution = puzzle {
         }
     }
 
-    fun Map<Point, Char>.energized(start: Point, direction: Direction) = beam(start to direction).count()
+    fun Map<IntPoint, Char>.energized(start: IntPoint, direction: Direction) = beam(start to direction).count()
 
     part1(parser) { map ->
         val start = 0 point 0
@@ -46,18 +46,18 @@ private val solution = puzzle {
         val width = lines.first().length
         max(
             lines.first().indices.maxOf { i ->
-                max(map.energized(Point(i, 0), Down), map.energized(Point(i, height), Up))
+                max(map.energized(IntPoint(i, 0), Down), map.energized(IntPoint(i, height), Up))
             },
             lines.indices.maxOf { j ->
-                max(map.energized(Point(0, j), Right), map.energized(Point(width, j), Left))
+                max(map.energized(IntPoint(0, j), Right), map.energized(IntPoint(width, j), Left))
             })
     }
 }
 
 
-private fun Map<Point, Char>.beam(ray: Pair<Point, Direction>): List<Point> {
-    val seen = mutableSetOf<Pair<Point, Direction>>()
-    DeepRecursiveFunction<Pair<Point, Direction>, Unit> { ray ->
+private fun Map<IntPoint, Char>.beam(ray: Pair<IntPoint, Direction>): List<IntPoint> {
+    val seen = mutableSetOf<Pair<IntPoint, Direction>>()
+    DeepRecursiveFunction<Pair<IntPoint, Direction>, Unit> { ray ->
         if (ray in seen) return@DeepRecursiveFunction
         val (p, dir) = ray
         if (p !in this@beam) return@DeepRecursiveFunction

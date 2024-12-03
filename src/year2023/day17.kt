@@ -24,7 +24,7 @@ fun main() {
 }
 
 object Day17 {
-    private data class Input(val location: Point, val direction: Direction, val run: Int = 0)
+    private data class Input(val location: IntPoint, val direction: Direction, val run: Int = 0)
 
     private fun Input.move(dir: Direction) = Input(location + dir, dir, if (dir == direction) run + 1 else 1)
 
@@ -37,9 +37,9 @@ object Day17 {
         }
 
 
-        fun findPath(map: Map<Point, Int>, minR: Int = 0, maxR: Int = 3): Int {
+        fun findPath(map: Map<IntPoint, Int>, minR: Int = 0, maxR: Int = 3): Int {
             val start = Input(0 point 0, Direction.Up, 0)
-            val end = map.keys.maxWith(compareBy<Point> { it.y }.thenBy { it.x })
+            val end = map.keys.maxWith(compareBy<IntPoint> { it.y }.thenBy { it.x })
             val best = mutableMapOf<Input, Int>()
             val q = PriorityQueue<Pair<Input, Int>>(compareBy { (inp, loss) -> loss })
             q.add(start to 0)
@@ -87,11 +87,11 @@ object Day17 {
 
 
     val dij = puzzle {
-        data class State(val pos: Point, val direction: Direction, val speed: Int) {
+        data class State(val pos: IntPoint, val direction: Direction, val speed: Int) {
             fun move(dir: Direction) = State(pos + dir, dir, if (dir == direction) speed + 1 else 1)
         }
 
-        fun List<String>.isValid(pos: Point) = pos.y in indices && pos.x in first().indices
+        fun List<String>.isValid(pos: IntPoint) = pos.y in indices && pos.x in first().indices
 
 
         fun List<String>.route(minSpeed: Int = 0, maxSpeed: Int = 3) =

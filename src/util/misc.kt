@@ -25,6 +25,8 @@ fun Any?.println() = println(this)
 
 fun <T> T.debug(prefix: String = ""): T = also { "$prefix$it".println() }
 
+fun <T> T.debug(block: () -> String): T = also { block().println() }
+
 /**
  * Convenience method to obtain the group values of a findall regex search of a string.
  */

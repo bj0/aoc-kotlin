@@ -42,8 +42,8 @@ object Day23 {
             val end = map.maxBy { (p, _) -> p.y }.key
 
 
-            fun bfs(start: Point, end: Point): MutableList<List<Point>> {
-                val paths = mutableListOf<List<Point>>()
+            fun bfs(start: IntPoint, end: IntPoint): MutableList<List<IntPoint>> {
+                val paths = mutableListOf<List<IntPoint>>()
                 val q = ArrayDeque(listOf(listOf(start)))
                 while (q.isNotEmpty()) {
                     val path = q.removeFirst()
@@ -92,11 +92,11 @@ object Day23 {
             val start = 1 point 0
             val end = map.maxBy { (p, _) -> p.y }.key
 
-            data class Walk(val from: Point, val here: Point, val last: Point, val steps: Int)
+            data class Walk(val from: IntPoint, val here: IntPoint, val last: IntPoint, val steps: Int)
             // find nodes
             val edges = buildMap {
                 with(map) {
-                    val visited = mutableSetOf<Point>()
+                    val visited = mutableSetOf<IntPoint>()
                     val q = ArrayDeque(listOf(Walk(start, start, start, 0)))
                     while (q.isNotEmpty()) {
                         val (from, here, last, n) = q.removeFirst()
@@ -128,14 +128,14 @@ object Day23 {
 
             val graph = buildMap {
                 edges.forEach { (e, n) ->
-                    put(e.a, (get(e.a) ?: listOf<Pair<Point, Int>>()) + (e.b to n))
-                    put(e.b, (get(e.b) ?: listOf<Pair<Point, Int>>()) + (e.a to n))
+                    put(e.a, (get(e.a) ?: listOf<Pair<IntPoint, Int>>()) + (e.b to n))
+                    put(e.b, (get(e.b) ?: listOf<Pair<IntPoint, Int>>()) + (e.a to n))
                 }
             }
 
-            data class Input(val here: Point, val visited: Set<Point>, val dist: Int)
+            data class Input(val here: IntPoint, val visited: Set<IntPoint>, val dist: Int)
 
-            fun flood(start: Point, end: Point): Int {
+            fun flood(start: IntPoint, end: IntPoint): Int {
                 return DeepRecursiveFunction<Input, Int> { input ->
                     val (here, visited, dist) = input
 
@@ -161,21 +161,21 @@ object Day23 {
     }
 
 
-    data class Edge(val a: Point, val b: Point) {
+    data class Edge(val a: IntPoint, val b: IntPoint) {
         override fun toString(): String {
             return "(${a.x},${a.y})->(${b.x},${b.y})"
         }
     }
 
-    infix fun Point.edge(other: Point): Edge {
+    infix fun IntPoint.edge(other: IntPoint): Edge {
         val origin = 0 point 0
         return if ((origin mdist this) < (origin mdist other)) {
             Edge(this, other)
         } else Edge(other, this)
     }
 
-    context(Map<Point, Char>)
-    val Point.next
+    context(Map<IntPoint, Char>)
+    val IntPoint.next
         get() = Direction.entries.map { d -> this + d }.filter { get(it)?.let { c -> c != '#' } == true }
 }
 

@@ -33,14 +33,14 @@ fun main() {
 object KSMT {
     // can't get this to work
 
-    data class Stone(val pos: Point3L, val vel: Point3L)
+    data class Stone(val pos: LongPoint3, val vel: LongPoint3)
 
     val solution = puzzle {
         val parser3 = lineParser { line ->
             line.split(" @ ").let { (a, b) ->
                 Stone(
-                    Point3L(a.getLongList()),
-                    Point3L(b.getLongList())
+                    LongPoint3(a.getLongList()),
+                    LongPoint3(b.getLongList())
                 )
             }
         }
@@ -76,9 +76,9 @@ object KSMT {
         }
     }
 
-    private fun Point3L.independentOf(b: Point3L) = cross(b).any { it != 0L }
-    private infix fun Point3L.cross(other: Point3L) =
-        Point3L(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x)
+    private fun LongPoint3.independentOf(b: LongPoint3) = cross(b).any { it != 0L }
+    private infix fun LongPoint3.cross(other: LongPoint3) =
+        LongPoint3(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x)
 }
 
 object Day24 {
@@ -131,7 +131,7 @@ object Day24 {
         // haven't got this to work
         val parser = lineParser { line ->
             line.split(" @ ").let { (a, b) ->
-                Stone(Point3L(a), Point3L(b))
+                Stone(LongPoint3(a), LongPoint3(b))
             }
         }
         part2(parser) { stones ->
@@ -228,21 +228,21 @@ object Day24 {
         }
     }
 
-    private fun lin(r: Long, a: Point3L, s: Long, b: Point3L, t: Long, c: Point3L): Point3L {
+    private fun lin(r: Long, a: LongPoint3, s: Long, b: LongPoint3, t: Long, c: LongPoint3): LongPoint3 {
         val x = r * a.x + s * b.x + t * c.x
         val y = r * a.y + s * b.y + t * c.y
         val z = r * a.z + s * b.z + t * c.z
-        return Point3L(x, y, z)
+        return LongPoint3(x, y, z)
     }
 
-    private fun findRock(h1: Stone, h2: Stone, h3: Stone): Pair<Point3L, Long> {
+    private fun findRock(h1: Stone, h2: Stone, h3: Stone): Pair<LongPoint3, Long> {
         val (a, A) = findPlane(h1, h2)//.debug("a")
         val (b, B) = findPlane(h1, h3)//.debug("b")
         val (c, C) = findPlane(h2, h3)//.debug("c")
 
         val W = lin(A, b cross c, B, c cross a, C, a cross b)//.debug("W")
         val t = a dot (b cross c)
-        val w = Point3L(W.x / t, W.y / t, W.z / t)//.debug("w")
+        val w = LongPoint3(W.x / t, W.y / t, W.z / t)//.debug("w")
 
         val w1 = h1.vel - w
         val w2 = h2.vel - w
@@ -257,7 +257,7 @@ object Day24 {
         return rock to S
     }
 
-    private fun findPlane(h1: Stone, h2: Stone): Pair<Point3L, Long> {
+    private fun findPlane(h1: Stone, h2: Stone): Pair<LongPoint3, Long> {
         val p01 = h1.pos - h2.pos
         val v01 = h1.vel - h2.vel
         val vv = h1.vel cross h2.vel
@@ -272,12 +272,12 @@ object Day24 {
         override fun toString() = "($x,$y,$z)"
     }
 
-    private infix fun Point3L.dot(other: Point3L) = x * other.x + y * other.y + z * other.z
-    private infix fun Point3L.cross(other: Point3L) =
-        Point3L(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x)
+    private infix fun LongPoint3.dot(other: LongPoint3) = x * other.x + y * other.y + z * other.z
+    private infix fun LongPoint3.cross(other: LongPoint3) =
+        LongPoint3(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x)
 
-    operator fun Point3L.minus(b: Point3L) = copy(x = x - b.x, y = y - b.y, z = z - b.z)
-    private fun Point3L.independentOf(b: Point3L) = cross(b).any { it != 0L }
+    operator fun LongPoint3.minus(b: LongPoint3) = copy(x = x - b.x, y = y - b.y, z = z - b.z)
+    private fun LongPoint3.independentOf(b: LongPoint3) = cross(b).any { it != 0L }
     data class Point2d(val x: Double, val y: Double)
 
     private fun Point3d.ignoreZ() = Point2d(x, y)
@@ -319,7 +319,7 @@ object Day24 {
 
     private fun Point3d.length() = sqrt(this dot this)
 
-    data class Stone(val pos: Point3L, val vel: Point3L)
+    data class Stone(val pos: LongPoint3, val vel: LongPoint3)
 
     private fun Point3d(str: String, delim: Char = ','): Point3d {
         val (x, y, z) = str.split(delim).filter { it.isNotBlank() }.map { it.trim().toDouble() }

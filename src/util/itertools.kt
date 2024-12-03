@@ -26,7 +26,7 @@ fun <T : Any> Iterable<T>.cycle(): Sequence<T> = sequence {
         yield(elem)
     }
     while (true) {
-        for (elem in saved) yield(elem)
+        yieldAll(saved)
     }
 }
 

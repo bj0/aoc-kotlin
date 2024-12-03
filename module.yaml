@@ -17,7 +17,9 @@ dependencies:
   - io.ksmt:ksmt-core:0.5.26
   - io.ksmt:ksmt-z3:0.5.26
   - $kotlin.reflect
+  - space.kscience:kmath-core:0.4.0
 
 
 repositories:
   - https://oss.sonatype.org/content/repositories/snapshots
+  - https://repo.kotlin.link
