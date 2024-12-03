@@ -1,5 +1,6 @@
 package year2024
 
+import util.Solutions
 import util.getIntList
 import util.puzzle
 import util.solveAll
@@ -12,7 +13,7 @@ fun main() {
     Day1.solveAll()
 }
 
-object Day1 {
+object Day1 : Solutions {
     // cleaned up solution
     val cleaner = puzzle {
         val parser = parser {
