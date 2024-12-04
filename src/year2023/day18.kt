@@ -35,19 +35,7 @@ fun main() {
 //    Day18Test.solveAll()
 }
 
-typealias Point = Buffer<Long>
-
 object Day18Test {
-
-    private val Point.x: Long get() = first()
-    private val Point.y: Long get() = get(1)
-    private fun point(vararg vals: Long) = vals.asBuffer()
-    private fun Point.move(dir: Direction, steps: Int) = when (dir) {
-        Direction.Left -> point(x - steps, y)
-        Direction.Up -> point(x, y - steps)
-        Direction.Right -> point(x + steps, y)
-        Direction.Down -> point(x, y + steps)
-    }
 
     val kmath = puzzle {
         with(Int64Field.bufferAlgebra.withSize(2)) {
@@ -68,23 +56,21 @@ object Day18Test {
             }
 
             part2 {
-                with(Int64Field.bufferAlgebra.withSize(2)) {
-                    val colMap = mapOf('0' to 'R', '1' to 'D', '2' to 'L', '3' to 'U')
+                val colMap = mapOf('0' to 'R', '1' to 'D', '2' to 'L', '3' to 'U')
 
-                    var pos = zero
-                    var last = pos
-                    var perim = 0L
-                    var area = 0L
-                    for (line in lines.map { it.substringAfter("(#").substringBefore(")") }) {
-                        val dir = Direction.parse(colMap[line[5]]!!)
-                        val n = line.substring(0, 5).toInt(16)
-                        perim += n
-                        pos = pos.move(dir, n)
-                        area += last.x * pos.y - last.y * pos.x
-                        last = pos
-                    }
-                    area / 2 - perim / 2 + 1 + perim
+                var pos = zero
+                var last = pos
+                var perim = 0L
+                var area = 0L
+                for (line in lines.map { it.substringAfter("(#").substringBefore(")") }) {
+                    val dir = Direction.parse(colMap[line[5]]!!)
+                    val n = line.substring(0, 5).toInt(16)
+                    perim += n
+                    pos = pos.move(dir, n)
+                    area += last.x * pos.y - last.y * pos.x
+                    last = pos
                 }
+                area / 2 - perim / 2 + 1 + perim
             }
         }
     }

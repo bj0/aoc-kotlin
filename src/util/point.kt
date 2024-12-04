@@ -15,6 +15,14 @@ data class IntPoint(val x: Int, val y: Int) {
 data class LongPoint(val x: Long, val y: Long) {
     companion object {
         val Zero = 0L point 0
+        val North = Zero.North
+        val NorthEast = Zero.NorthEast
+        val East = Zero.East
+        val SouthEast = Zero.SouthEast
+        val South = Zero.South
+        val SouthWest = Zero.SouthWest
+        val West = Zero.West
+        val NorthWest = Zero.NorthWest
     }
 
     override fun toString() = "($x,$y)"
@@ -55,6 +63,15 @@ infix fun LongPoint.mdist(other: LongPoint) = (other.x - x).absoluteValue + (oth
 operator fun IntPoint.plus(dir: Direction) = move(dir, 1)
 operator fun LongPoint.plus(dir: Direction) = move(dir, 1)
 
+operator fun Int.times(point: IntPoint) = IntPoint(point.x * this, point.y * this)
+operator fun Long.times(point: LongPoint) = LongPoint(point.x * this, point.y * this)
+
+operator fun IntPoint.plus(other: IntPoint) = IntPoint(this.x + other.x, this.y + other.y)
+operator fun LongPoint.plus(other: LongPoint) = LongPoint(this.x + other.x, this.y + other.y)
+
+operator fun IntPoint.minus(other: IntPoint) = IntPoint(this.x - other.x, this.y - other.y)
+operator fun LongPoint.minus(other: LongPoint) = LongPoint(this.x - other.x, this.y - other.y)
+
 fun IntPoint.step(dir: Direction) = when (dir) {
     Direction.Left -> left
     Direction.Up -> up
@@ -69,13 +86,39 @@ fun LongPoint.step(dir: Direction) = when (dir) {
     Direction.Down -> down
 }
 
-fun IntPoint.move(dir: Direction, steps: Int = 0) = IntPoint.Zero.step(dir).let { p ->
+fun LongPoint.neighbors(includeDiagonals: Boolean = false) =
+    if (includeDiagonals) GridDirection.entries.map { step(it) } else
+        listOf(North, East, South, West)
+
+fun LongPoint.Companion.neighbors(includeDiagonals: Boolean = false) = Zero.neighbors(includeDiagonals)
+
+fun LongPoint.step(direction: GridDirection) = move(direction)
+
+fun LongPoint.move(direction: GridDirection, steps: Int = 1) = direction.let { (dx, dy) ->
+    copy(x = x + steps * dx, y = y + steps * dy)
+}
+
+fun LongPoint.walk(direction: GridDirection) = generateSequence(this) { it.step(direction) }
+
+
+fun IntPoint.move(dir: Direction, steps: Int = 1) = IntPoint.Zero.step(dir).let { p ->
     copy(x = x + steps * p.x, y = y + steps * p.y)
 }
 
-fun LongPoint.move(dir: Direction, steps: Int = 0) = LongPoint.Zero.step(dir).let { p ->
+fun LongPoint.move(dir: Direction, steps: Int = 1) = LongPoint.Zero.step(dir).let { p ->
     copy(x = x + steps * p.x, y = y + steps * p.y)
 }
+
+val LongPoint.North get() = step(GridDirection.North)
+val LongPoint.NorthEast get() = step(GridDirection.NorthEast)
+val LongPoint.East get() = step(GridDirection.East)
+val LongPoint.SouthEast get() = step(GridDirection.SouthEast)
+val LongPoint.South get() = step(GridDirection.South)
+val LongPoint.SouthWest get() = step(GridDirection.SouthWest)
+val LongPoint.West get() = step(GridDirection.West)
+val LongPoint.NorthWest get() = step(GridDirection.NorthWest)
+
+//fun LongPoint.walk(dir: Direction) = generateSequence(this) { p -> p.move(dir) }
 
 fun IntPoint.within(width: Int, height: Int) = x in 0..<width && y in 0..<height
 
