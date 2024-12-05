@@ -43,43 +43,51 @@ fun main() {
 
 object Day5 : Solutions {
 
-    // fastest
+    // fastest, uses a map and a comparator
     val comparator = puzzle {
         val parser = parser {
             val (order, pages) = input.split("\n\n")
-            buildMap {
+
+            // using a map for comparator is faster
+            val rules = buildMap {
                 order.lines().forEach {
                     val (a, b) = it.split("|")
-                    getOrPut(a) { mutableSetOf<String>() }.add(b)
+                    put(a to b, -1)
+                    put(b to a, 1)
                 }
-            } to pages.lines().map { it.split(",") }
+            }
+            val comparator = Comparator<String> { left, right ->
+                rules[left to right]!!
+            }
+
+//            val rules = order.lines().map { it.split("|") }
+//                .groupBy({ it.first() }) { it.last() }
+//            val comparator = Comparator<String> { left, right ->
+//                val leftRule = rules[left].orEmpty()
+//                val rightRule = rules[right].orEmpty()
+//                when {
+//                    left in rightRule -> 1
+//                    right in leftRule -> -1
+//                    else -> 0
+//                }
+//            }
+            comparator to pages.lines().map { it.split(",") }
         }
 
+
+        fun Comparator<String>.isValid(page: List<String>) =
+            page.asSequence().zipWithNext().all { (a, b) -> compare(a, b) <= 0 }
+
         part1(parser) { (order, pages) ->
-            fun List<String>.isValid() =
-                all { a -> order[a]?.all { b -> b !in this || indexOf(a) < indexOf(b) } ?: true }
-            pages.filter { it.isValid() }.sumOf { it[it.size / 2].toInt() }
+            pages.filter { order.isValid(it) }.sumOf { it[it.size / 2].toInt() }
         }
 
         part2(parser) { (order, pages) ->
-            fun List<String>.isValid() =
-                all { a -> order[a]?.all { b -> b !in this || indexOf(a) < indexOf(b) } ?: true }
-
-            val comparator = Comparator<String> { left, right ->
-                val leftRule = order[left]
-                val rightRule = order[right]
-                when {
-                    rightRule != null && left in rightRule -> 1
-                    leftRule != null && right in leftRule -> -1
-                    else -> 0
-                }
-            }
-
-            pages.filterNot { it.isValid() }
+//            pages.sumOf { page -> if (order.isValid(page)) 0 else page.sortedWith(order)[page.size / 2].toInt() }
+            pages.filterNot { order.isValid(it) }
                 .map { line ->
-                    line.sortedWith(comparator)
+                    line.sortedWith(order)
                 }.sumOf { it[it.size / 2].toInt() }
-
         }
     }
 
