@@ -14,7 +14,7 @@ interface Grid<T> {
 
     fun find(block: (LongPoint, T) -> Boolean): LongPoint?
 
-    fun findAll(block: (LongPoint, T) -> Boolean): List<LongPoint>
+    fun findAll(block: (LongPoint, T) -> Boolean): Set<LongPoint>
 }
 
 data class MapGrid<T>(val data: Map<LongPoint, T>, override val xRange: LongRange, override val yRange: LongRange) :
@@ -31,7 +31,7 @@ data class MapGrid<T>(val data: Map<LongPoint, T>, override val xRange: LongRang
         entries.firstOrNull { (k, v) -> block(k, v) }?.key
 
 
-    override fun findAll(block: (LongPoint, T) -> Boolean) = entries.filter { (k, v) -> block(k, v) }.map { it.key }
+    override fun findAll(block: (LongPoint, T) -> Boolean) = filter { (k, v) -> block(k, v) }.keys
 }
 
 @JvmInline
@@ -66,7 +66,7 @@ value class StringGrid(val data: List<String>) :
         return null
     }
 
-    override fun findAll(block: (LongPoint, Char) -> Boolean): List<LongPoint> = buildList {
+    override fun findAll(block: (LongPoint, Char) -> Boolean): Set<LongPoint> = buildSet {
         data.forEachIndexed { y, row ->
             row.forEachIndexed { x, char ->
                 val p = x.toLong() point y.toLong()
