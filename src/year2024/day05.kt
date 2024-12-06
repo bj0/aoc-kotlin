@@ -75,6 +75,8 @@ object Day5 : Solutions {
         }
 
 
+        //todo i don't think just checking adjacent items works in the general case (what if two unsorted items are
+        // separated by an item that doesn't participate in the rules?), but worked for the input
         fun Comparator<String>.isValid(page: List<String>) =
             page.asSequence().zipWithNext().all { (a, b) -> compare(a, b) <= 0 }
 
