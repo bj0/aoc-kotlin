@@ -65,6 +65,7 @@ operator fun LongPoint.plus(dir: Direction) = move(dir, 1)
 
 operator fun Int.times(point: IntPoint) = IntPoint(point.x * this, point.y * this)
 operator fun Long.times(point: LongPoint) = LongPoint(point.x * this, point.y * this)
+operator fun LongPoint.times(value: Long) = value * this
 
 operator fun IntPoint.plus(other: IntPoint) = IntPoint(this.x + other.x, this.y + other.y)
 operator fun LongPoint.plus(other: LongPoint) = LongPoint(this.x + other.x, this.y + other.y)
