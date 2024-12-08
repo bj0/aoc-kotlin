@@ -32,7 +32,7 @@ object Day8 : Solutions {
             val grid = lines.toMapGrid()
             val signals =
                 grid.filterValues { it != '.' }.entries.groupBy(keySelector = { it.value }, valueTransform = { it.key })
-            signals.entries.flatMap { (_, locations) ->
+            signals.values.flatMap { locations ->
                 locations.flatMap { a ->
                     (locations - a).map { b ->
                         a + (b - a) * 2
@@ -45,7 +45,7 @@ object Day8 : Solutions {
             val grid = lines.toMapGrid()
             val signals =
                 grid.filterValues { it != '.' }.entries.groupBy(keySelector = { it.value }, valueTransform = { it.key })
-            signals.entries.flatMap { (_, locations) ->
+            signals.values.flatMap { locations ->
                 locations.flatMap { a ->
                     (locations - a).flatMap { b ->
                         val dr = b - a
