@@ -62,9 +62,9 @@ object Day09 : Solutions {
                         frm.copy(pos = to.pos)
                     } else frm
                 } else frm
-            }.sortedBy { it.pos }
+            }
 
-            sorted.fold(0L) { acc, n -> acc + (n.pos * n.size + n.size * (n.size - 1) / 2) * n.id }
+            sorted.sumOf { n -> (n.pos * n.size + n.size * (n.size - 1) / 2) * n.id }
         }
     }
 }
