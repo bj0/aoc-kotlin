@@ -126,12 +126,12 @@ object Day12 : Solutions {
         }
     }
 
-    val cleaned = puzzle {
+    val cleanedUp = puzzle {
         // generic bfs walk, return visited points
         fun <T> walk(
             start: T,
             getNeighbors: (T) -> List<T>
-        ): MutableSet<T> {
+        ): Set<T> {
             val visited = mutableSetOf<T>()
             fun innerWalk(cur: T) {
                 if (cur in visited) return
