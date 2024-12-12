@@ -31,13 +31,6 @@ fun main() {
 }
 
 object Day12 : Solutions {
-    data class Fence(val point: LongPoint, val direction: GridDirection)
-
-    @JvmInline
-    value class Plot(val point: LongPoint) {
-        override fun toString() = point.toString()
-    }
-
     val solution = puzzle {
         fun walk(
             map: Map<LongPoint, Char>,
@@ -318,6 +311,13 @@ object Day12 : Solutions {
 
             plants.sumOf { plant -> discountPricePlot(grid.filterValues { it == plant }) }
         }
+    }
+
+    data class Fence(val point: LongPoint, val direction: GridDirection)
+
+    @JvmInline
+    value class Plot(val point: LongPoint) {
+        override fun toString() = point.toString()
     }
 
     // slower
