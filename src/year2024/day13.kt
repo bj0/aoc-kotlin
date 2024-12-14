@@ -31,13 +31,11 @@ object Day13 : Solutions {
 
     data class Machine(val a: LongPoint, val b: LongPoint, val prize: LongPoint)
 
+    private inline fun Long.safeDiv(b: Long, onFail: () -> Nothing) = if (this.rem(b) == 0L) this / b else onFail()
     private fun solve(machine: Machine) = with(machine) {
-        val aPushes = ((prize.x * b.y - b.x * prize.y) / (a.x * b.y - a.y * b.x).toDouble()).toLong()
-        // this didn't work, but it should be the same
-//        val A = ((prize.x - b.x * prize.y / b.y.toDouble()) / (a.x - a.y * b.x / b.y.toDouble())).toLong()
-
-        val bPushes = ((prize.y - aPushes * a.y) / b.y.toDouble()).toLong()
-        if (aPushes > 0 && bPushes > 0 && (aPushes * a + bPushes * b == prize)) aPushes * 3 + bPushes * 1 else 0
+        val A = (prize.x * b.y - b.x * prize.y).safeDiv(a.x * b.y - a.y * b.x) { return 0L }
+        val B = (prize.y - A * a.y).safeDiv(b.y) { return 0L }
+        if (A > 0 && B > 0 && (A * a + B * b == prize)) A * 3 + B * 1 else 0
     }
 
     val solution = puzzle {
