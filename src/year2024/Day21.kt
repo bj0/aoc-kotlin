@@ -63,37 +63,39 @@ object Day21 : Solutions {
             Left -> '<'
         }
 
-    data class State(val prev: Char, val next: Char, val depth: Int)
-    data class State2(val pos: LongPoint, val prev: Char, val cost: Long)
+    data class State(val prevKey: Char, val nextKey: Char, val depth: Int)
 
-    val cache = mutableMapOf<State, Long>()
+    // prevMove is the prev key pressed on the lower pad
+    data class InnerState(val curKey: Char, val prevMove: Char, val cost: Long)
+
     // num of presses to press "prev" then "next"
-    fun State.distance(pad: Pad): Long = (cache.getOrPut(this) {
-        if (depth == -1) return@getOrPut 1L
-        if (prev == next) return@getOrPut 1L
-        val start = pad[prev]
-        val end = pad[next]
-        val dirs = start dirsTo end
-        val q = PriorityQueue<State2>(compareBy { it.cost })
-        q += State2(start, 'A', 0)
-        val seen = mutableSetOf<Pair<LongPoint, Char>>()
+    val cache = mutableMapOf<State, Long>()
+    fun State.pressCount(pad: Pad): Long = (cache.getOrPut(this) {
+        // human press || no move, just press
+        if (depth == -1 || prevKey == nextKey) return@getOrPut 1L
+        val possibleDirections = pad[prevKey] dirsTo pad[nextKey]
+        val q = PriorityQueue<InnerState>(compareBy { it.cost })
+        q += InnerState(prevKey, 'A', 0)
         while (q.isNotEmpty()) {
-            val (cur, pmove, cost) = q.remove()
-            if (cur to pmove in seen) continue
-            seen += cur to pmove
-            if (cur == end) {
-                if (pmove == 'A') return@getOrPut cost
-                q += State2(cur, 'A', cost + State(pmove, 'A', depth - 1).distance(dpad))
-                continue
+            val (curKey, prevMove, cost) = q.remove()
+            when {
+                curKey == nextKey && prevMove == 'A' -> return@getOrPut cost
+                // dont' forget to press the key when you get there
+                curKey == nextKey -> q += InnerState(
+                    curKey,
+                    'A',
+                    cost + State(prevMove, 'A', depth - 1).pressCount(dpad)
+                )
+
+                else -> q += possibleDirections.map { pad[curKey] + it to it }.filter { it.first in pad }
+                    .map {
+                        InnerState(
+                            pad[it.first],
+                            it.second.button,
+                            cost + State(prevMove, it.second.button, depth - 1).pressCount(dpad)
+                        )
+                    }
             }
-            q += dirs.map { cur + it to it }.filter { it.first in pad }
-                .map {
-                    State2(
-                        it.first,
-                        it.second.button,
-                        cost + State(pmove, it.second.button, depth - 1).distance(dpad)
-                    )
-                }
         }
         error("no path")
     })
@@ -101,7 +103,45 @@ object Day21 : Solutions {
     val cleanup = puzzle {
         fun solve(code: String, pads: Int = 2): Long {
             return "A$code".zipWithNext { from, to ->
-                State(from, to, pads).distance(keypad)
+                State(from, to, pads).pressCount(keypad)
+            }.sum() * code.dropLast(1).toLong()
+        }
+
+
+        part1 {
+            lines.sumOf { solve(it) }
+        }
+
+        part2 {
+            lines.sumOf { solve(it, 25) }
+        }
+    }
+
+    val cache2 = mutableMapOf<State, Long>()
+
+    // num of presses to press "prev" then "next"
+    fun State.pressCountDij(pad: Pad): Long = (cache2.getOrPut(this) {
+        // human press
+        // no move, just press
+        if (depth == -1 || prevKey == nextKey) return@getOrPut 1L
+        val possibleDirections = pad[prevKey] dirsTo pad[nextKey]
+        return dijkstraL(
+            start = prevKey to 'A',
+            initialCost = 0L,
+            isEnd = { (cur, prevMove) -> cur == nextKey && prevMove == 'A' },
+            cost = { u, v -> State(u.second, v.second, depth - 1).pressCount(dpad) }
+        ) { (pos, _) ->
+            // dont' forget to press it when you get there
+            if (pos == nextKey) yield(pos to 'A') else
+                yieldAll(possibleDirections.map { pad[pos] + it to it }.filter { it.first in pad }
+                    .map { pad[it.first] to it.second.button })
+        }.second
+    })
+
+    val dij = puzzle {
+        fun solve(code: String, pads: Int = 2): Long {
+            return "A$code".zipWithNext { from, to ->
+                State(from, to, pads).pressCountDij(keypad)
             }.sum() * code.dropLast(1).toLong()
         }
 
@@ -203,4 +243,78 @@ object Day21 : Solutions {
             }
         }
     }
+
+
+    // this solution iterates all paths (no dij) and just takes shortest
+
+    fun String.toKeypad() = lines().toMapGrid().entries.associateBy({ it.value }, { it.key })
+
+    val numberspad = """
+        789
+        456
+        123
+        -0A
+    """.trimIndent().toKeypad()
+
+    val directionpad = """
+        -^A
+        <v>
+    """.trimIndent().toKeypad()
+
+    fun List<String>.solve(size: Int) = sumOf { it.sizeOfCommands(size) * it.getIntList()[0] }
+
+    fun String.sizeOfCommands(depth: Int, first: Boolean = true): Long = "A$this"
+        .zipWithNext { a, b -> State(a, b, depth).solve(first) }
+        .sum()
+
+    //    data class State(val from: Char, val to: Char, val depth: Int)
+    val memoization = mutableMapOf<State, Long>()
+    fun State.solve(first: Boolean): Long = memoization.getOrPut(this) {
+        val keypad = if (first) numberspad else directionpad
+        val routes = routes(keypad)
+        when (depth) {
+            0 -> routes.first().length.toLong()
+            else -> routes.minOf { it.sizeOfCommands(depth - 1, false) }
+        }
+    }
+
+    fun State.routes(keypad: Map<Char, LongPoint>): List<String> {
+        val start = keypad.getValue(prevKey)
+        val goal = keypad.getValue(nextKey)
+        val hole = keypad.getValue('-')
+        return generateSequence(listOf(start to emptyList<Direction>())) { frontier ->
+            frontier.flatMap { (end, path) ->
+                when (end) {
+                    hole -> emptyList()
+                    else -> listOfNotNull(
+                        if (end.x > goal.x) end + Left to path + Left else null,
+                        if (end.x < goal.x) end + Right to path + Right else null,
+                        if (end.y > goal.y) end + Up to path + Up else null,
+                        if (end.y < goal.y) end + Down to path + Down else null
+                    )
+                }
+            }
+        }.takeWhile { it.isNotEmpty() }.last().map { (_, line) -> line.toCharacters() }
+    }
+
+    fun List<Direction>.toCharacters() = map {
+        when (it) {
+            Up -> '^'
+            Down -> 'v'
+            Right -> '>'
+            Left -> '<'
+        }
+    }.joinToString("", postfix = "A")
+
+    val other = puzzle {
+        part1 {
+            lines.solve(2)
+        }
+
+        part2 {
+            lines.solve(25)
+        }
+    }
+
 }
+
