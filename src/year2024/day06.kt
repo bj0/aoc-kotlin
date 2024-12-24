@@ -144,7 +144,7 @@ object Day6 : Solutions {
         }
 
         part2 {
-            val grid = lines.toGrid()
+            val grid = lines.toStringGrid()
 
             val start = grid.find { _, c -> c == '^' }!!
 

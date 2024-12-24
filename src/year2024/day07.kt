@@ -1,5 +1,7 @@
 package year2024
 
+import arrow.fx.coroutines.parMap
+import kotlinx.coroutines.Dispatchers
 import util.*
 
 fun main() {
@@ -49,6 +51,37 @@ object Day07 : Solutions {
             }
 
             lines.filter { (test, nums) -> check(test, 0L, nums) }.sumOf { it.first }
+        }
+
+    }
+
+
+    val par = puzzle {
+        val parser = lineParser { it.split(":").let { (a, b) -> a.toLong() to b.getLongList() } }
+
+        part1(parser) { lines ->
+            fun check(test: Long, acc: Long = 0L, nums: List<Long>): Boolean {
+                if (nums.isEmpty()) return acc == test
+                val n = nums.first()
+                return check(test, acc + n, nums.subList(1, nums.size)) ||
+                        check(test, acc * n, nums.subList(1, nums.size))
+            }
+
+//            lines.parMap(Dispatchers.Default) { (test, nums) -> test to check(test, 0L, nums) }.filter { it.second }.sumOf { it.first }
+            lines.parMap(Dispatchers.Default) { (test, nums) -> if(check(test, 0L, nums)) test else 0 }.sum()
+        }
+
+        part2(parser) { lines ->
+            fun check(test: Long, acc: Long, nums: List<Long>): Boolean {
+                if (nums.isEmpty()) return acc == test
+                val n = nums.first()
+                return check(test, acc + n, nums.subList(1, nums.size)) ||
+                        check(test, acc * n, nums.subList(1, nums.size)) ||
+                        check(test, "$acc$n".toLong(), nums.subList(1, nums.size))
+
+            }
+
+            lines.parMap(Dispatchers.Default) { (test, nums) -> if(check(test, 0L, nums)) test else 0 }.sum()
         }
 
     }

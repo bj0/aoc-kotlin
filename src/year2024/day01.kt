@@ -9,7 +9,6 @@ import kotlin.math.absoluteValue
 
 
 fun main() {
-//    listOf(Day1::solution, Day1::cleaner, Day1::group).solveAll()
     Day1.solveAll()
 }
 
