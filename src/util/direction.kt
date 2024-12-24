@@ -9,6 +9,23 @@ enum class GridDirection(val dx: Int, val dy: Int) {
     West(-1, 0),
     NorthWest(-1, -1);
 
+    companion object {
+        fun directions(includeDiagonals: Boolean = false) = sequence {
+            yieldAll(listOf(North, East, South, West))
+            if (includeDiagonals) {
+                yieldAll(listOf(NorthEast, SouthEast, SouthWest, NorthWest))
+            }
+        }.toList()
+    }
+
+    fun clockwise(): GridDirection {
+        return entries[(ordinal + 1) % entries.size]
+    }
+
+    fun counterClockwise(): GridDirection {
+        return entries[(ordinal + entries.size - 1) % entries.size]
+    }
+
     operator fun component1() = dx
     operator fun component2() = dy
 }

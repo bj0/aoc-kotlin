@@ -54,7 +54,7 @@ value class StringGrid(val data: List<String>) :
                 }
             })
         }
-    }.toGrid()
+    }.toStringGrid()
 
     override fun find(block: (LongPoint, Char) -> Boolean): LongPoint? {
         data.forEachIndexed { y, row ->
@@ -77,9 +77,21 @@ value class StringGrid(val data: List<String>) :
     }
 }
 
-fun String.toGrid(delimiter: String = "\n") = split(delimiter).toGrid()
+fun String.toGrid(delimiter: String = "\n") = split(delimiter).toStringGrid()
 
-fun List<String>.toGrid(): Grid<Char> = StringGrid(this)
+fun <T> List<List<T>>.toGrid(): Grid<T> = MapGrid(
+    data = buildMap {
+        forEachIndexed { r, row ->
+            row.forEachIndexed { c, item ->
+                put(c.toLong() point r.toLong(), item)
+            }
+        }
+    },
+    yRange = 0L..<size,
+    xRange = 0L..<maxOf { it.size })
+
+
+fun List<String>.toStringGrid(): Grid<Char> = StringGrid(this)
 
 fun List<String>.toMapGrid(): MapGrid<Char> = MapGrid(
     data = buildMap {

@@ -140,7 +140,6 @@ fun Iterable<PuzDSL>.solveAll(
     input: InputProvider = InputProvider.Default
 ) = with(input) { map { it.resolvePuzzle() }.solveAll() }
 
-
 context(InputProvider)
 fun Iterable<Puz<*, *>>.solveAll(runIterations: Int = 1) =
     sortedWith(compareBy<Puz<*, *>> { it.year }.thenBy { it.day })

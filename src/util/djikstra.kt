@@ -113,6 +113,37 @@ inline fun <T> dijkstra(
     }
     error("no route")
 }
+data class DijStateL<T>(val value: T, val dist: Long)
+
+inline fun <T> dijkstraL(
+    start: T,
+    initialCost: Long = 0,
+    isEnd: (v: T) -> Boolean,
+    crossinline cost: (u: T, v: T) -> Long,
+    crossinline choices: suspend SequenceScope<T>.(T) -> Unit
+): Pair<List<T>, Long> {
+    val prev = mutableMapOf<T, T>()
+    // needed for not 'consistent' cost function
+    val dist = mutableMapOf(start to initialCost)
+    // using it.dist instead of dist[it.value] makes it almost twice as fast, not sure why
+    val unvisited = PriorityQueue<DijStateL<T>>(compareBy { it.dist })
+    unvisited += DijStateL(start, initialCost)
+    while (unvisited.isNotEmpty()) {
+        val current = unvisited.remove()
+
+        if (isEnd(current.value)) return generateSequence(current.value) { prev[it] }.toList()
+            .reversed() to current.dist
+
+        unvisited += sequence { choices(current.value) }
+            .map { DijStateL(it, current.dist + cost(current.value, it)) }
+            .filter { next -> next.value !in dist || dist[next.value]!! > next.dist } //best[next.value]?.let { it > next.dist } != true }
+            .onEach {
+                dist[it.value] = it.dist
+                prev[it.value] = current.value
+            }
+    }
+    error("no route")
+}
 
 data class DijPath<T>(val state: DijState<T>, val prev: List<T>)
 

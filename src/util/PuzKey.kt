@@ -1,7 +1,9 @@
 package util
 
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.Serializable
 
+@Serializable
 sealed interface PuzKey {
     val year: Int
     val day: Int
@@ -11,7 +13,8 @@ sealed interface PuzKey {
         fun of(year: Int, day: Int, variant: String): PuzKey = Impl(year, day, variant)
     }
 
-    private data class Impl(override val year: Int, override val day: Int, override val variant: String) : PuzKey
+    @Serializable
+    data class Impl(override val year: Int, override val day: Int, override val variant: String) : PuzKey
 }
 
 interface Puz<out P1, out P2> : PuzKey {

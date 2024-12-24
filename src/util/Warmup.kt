@@ -8,7 +8,7 @@ sealed interface Warmup {
     context(PuzzleInput)
     fun run(year: Int, day: Int, puzzles: List<Puz<*, *>>)
 
-    private object None : Warmup {
+    private data object None : Warmup {
         context(PuzzleInput) override fun run(year: Int, day: Int, puzzles: List<Puz<*, *>>) = Unit
     }
 

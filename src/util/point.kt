@@ -66,6 +66,8 @@ operator fun LongPoint.plus(dir: Direction) = move(dir, 1)
 operator fun Int.times(point: IntPoint) = IntPoint(point.x * this, point.y * this)
 operator fun Long.times(point: LongPoint) = LongPoint(point.x * this, point.y * this)
 operator fun LongPoint.times(value: Long) = value * this
+operator fun LongPoint.plus(value: Long) = copy(x = value + x, y = value + y)
+operator fun LongPoint.div(value:Long) = copy(x = x / value, y = y / value)
 
 operator fun IntPoint.plus(other: IntPoint) = IntPoint(this.x + other.x, this.y + other.y)
 operator fun LongPoint.plus(other: LongPoint) = LongPoint(this.x + other.x, this.y + other.y)
@@ -110,6 +112,8 @@ fun LongPoint.move(dir: Direction, steps: Int = 1) = LongPoint.Zero.step(dir).le
     copy(x = x + steps * p.x, y = y + steps * p.y)
 }
 
+fun LongPoint.mod(modulo: LongPoint) = (x.mod(modulo.x) point y.mod(modulo.y))
+
 val LongPoint.North get() = step(GridDirection.North)
 val LongPoint.NorthEast get() = step(GridDirection.NorthEast)
 val LongPoint.East get() = step(GridDirection.East)
@@ -122,6 +126,7 @@ val LongPoint.NorthWest get() = step(GridDirection.NorthWest)
 //fun LongPoint.walk(dir: Direction) = generateSequence(this) { p -> p.move(dir) }
 
 fun IntPoint.within(width: Int, height: Int) = x in 0..<width && y in 0..<height
+fun LongPoint.within(width:Long, height:Long) = x in 0..<width && y in 0..<height
 
 infix fun Int.point(y: Int) = IntPoint(this, y)
 infix fun Long.point(y: Long) = LongPoint(this, y)

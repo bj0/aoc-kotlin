@@ -44,7 +44,7 @@ fun count(start: Int = 0, step: Int = 1): Sequence<Int> = generateSequence(start
  * @param start The value at which the sequence starts
  * @param step The step size
  */
-fun count(start: Long = 0, step: Long = 1): Sequence<Long> = generateSequence(start) { it + step }
+fun count(start: Long = 0L, step: Long = 1L): Sequence<Long> = generateSequence(start) { it + step }
 
 /**
  * Make an [Sequence] that returns evenly spaced values starting with n
