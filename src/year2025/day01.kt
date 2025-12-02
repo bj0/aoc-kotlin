@@ -57,6 +57,25 @@ object Day1 : Solutions {
         }
     }
 
+    val first2 = puzzle{
+        part2 {
+            lines.fold(50 to 0) { (pos, oldCount), op ->
+                val newPos = (pos + when (op[0]) {
+                    'L' -> -op.drop(1).toInt()
+                    'R' -> op.drop(1).toInt()
+                    else -> error("bad input")
+                })
+
+                newPos.mod(100) to oldCount + when {
+                    pos == 0 && newPos <= -100 -> (newPos..0 step 100).count() - 1
+                    (pos > 0 && newPos <= 0) -> (newPos..0 step 100).count()
+                    newPos >= 100 -> (newPos downTo 100 step 100).count()
+                    else -> 0
+                }
+            }.second
+        }
+    }
+
     val brute = puzzle {
         part2 {
             lines.runningFold(50 to 0) { (s, s0), op ->
