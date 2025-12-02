@@ -68,10 +68,12 @@ object Day2 : Solutions {
                     val s = it.toString()
                     if ((1..s.length / 2).any { i ->
                             val p = s.take(i)
-                            fun check(left: String): Boolean {
-                                if (left.isEmpty()) return true
-                                if (left.take(i) != p) return false
-                                return check(left.drop(i))
+                            tailrec fun check(left: String): Boolean {
+                                return when {
+                                    left.isEmpty() -> true
+                                    left.take(i) != p -> false
+                                    else -> check(left.drop(i))
+                                }
                             }
                             check(s.drop(i))
                         }) it else 0
