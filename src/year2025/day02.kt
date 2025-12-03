@@ -17,7 +17,7 @@ fun main() {
 
 object Day2 : Solutions {
     val first = puzzle {
-        val parser = parser { input.split(",").map { it.split("-").map { it.toLong() }.let { it.first()..it[1] } } }
+        val parser = parser { input.split(",").map { it.split("-").map { it.toLong() }.let { it.first()..it.last() } } }
         part1(parser) { ranges ->
             ranges.sumOf { r ->
                 r.sumOf {
@@ -82,5 +82,16 @@ object Day2 : Solutions {
         }
     }
 
+    val regex = puzzle {
+        val pat = """(\d+)\1+""".toRegex()
+        val parser = parser { input.split(",").map { it.split("-").map { it.toLong() }.let { it.first()..it[1] } } }
+        part2(parser) { ranges ->
+            ranges.sumOf { r ->
+                r.sumOf {
+                    if (it.toString().matches(pat)) it else 0
+                }
+            }
+        }
+    }
 }
 
