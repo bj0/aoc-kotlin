@@ -6,6 +6,27 @@ import kotlin.math.min
 val IntRange.size get() = last - first + 1
 val LongRange.size get() = last - first + 1
 
+//operator fun LongRange.component1() = first
+//operator fun LongRange.component2() = last
+operator fun <T : Comparable<T>> ClosedRange<T>.component1() = start
+operator fun <T : Comparable<T>> ClosedRange<T>.component2() = endInclusive
+
+fun List<LongRange>.merge() = sortedBy { it.first }
+    .fold(emptyList<LongRange>()) { acc, range ->
+        acc.lastOrNull()?.let { current ->
+            when {
+                // new range
+                current.last < range.first -> acc + listOf(range)
+                // no change
+                range.last <= current.last -> acc
+                // merge
+                else -> acc.dropLast(1) + listOf(current.first..range.last)
+            }
+            // first
+        } ?: listOf(range)
+    }
+
+
 fun <T> Sequence<T>.repeat() = sequence { while (true) yieldAll(this@repeat) }
 fun <T> Sequence<T>.repeat(count: Int) = sequence { repeat(count) { yieldAll(this@repeat) } }
 
