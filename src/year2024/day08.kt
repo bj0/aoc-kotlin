@@ -26,7 +26,7 @@ fun main() {
 
 object Day8 : Solutions {
 
-    val solution = puzzle {
+    val solution = solution {
 
         part1 {
             val grid = lines.toMapGrid()

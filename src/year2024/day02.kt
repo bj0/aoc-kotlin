@@ -20,7 +20,7 @@ fun main() {
 
 object Day2 : Solutions {
 
-    val opt = puzzle {
+    val opt = solution {
         val reports = lineParser { it.getIntList() }
 
         fun safe(levels: List<Int>) = levels.zipWithNext { x, y -> y - x }.let { diffs ->
@@ -39,7 +39,7 @@ object Day2 : Solutions {
 
         }
     }
-    val solution = puzzle {
+    val solution = solution {
         val reports = lineParser { it.getIntList() }
 
         fun safe(levels: List<Int>) = levels.windowed(2).map { (x, y) -> y - x }

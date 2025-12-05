@@ -2,7 +2,7 @@ package year2025
 
 import util.InputProvider
 import util.Solutions
-import util.puzzle
+import util.solution
 import util.solveAll
 
 
@@ -16,7 +16,7 @@ fun main() {
 }
 
 object Day2 : Solutions {
-    val first = puzzle {
+    val first = solution {
         val parser = parser { input.split(",").map { it.split("-").map { it.toLong() }.let { it.first()..it.last() } } }
         part1(parser) { ranges ->
             ranges.sumOf { r ->
@@ -45,7 +45,7 @@ object Day2 : Solutions {
         }
     }
 
-    val chunk = puzzle {
+    val chunk = solution {
         val parser = parser { input.split(",").map { it.split("-").map { it.toLong() }.let { it.first()..it[1] } } }
         part2(parser) { ranges ->
             ranges.sumOf { r ->
@@ -60,7 +60,7 @@ object Day2 : Solutions {
         }
     }
 
-    val recursive = puzzle {
+    val recursive = solution {
         val parser = parser { input.split(",").map { it.split("-").map { it.toLong() }.let { it.first()..it[1] } } }
         part2(parser) { ranges ->
             ranges.sumOf { r ->
@@ -82,7 +82,7 @@ object Day2 : Solutions {
         }
     }
 
-    val regex = puzzle {
+    val regex = solution {
         val pat = """(\d+)\1+""".toRegex()
         val parser = parser { input.split(",").map { it.split("-").map { it.toLong() }.let { it.first()..it[1] } } }
         part2(parser) { ranges ->

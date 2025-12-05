@@ -20,7 +20,7 @@ object Day23 {
         else -> error("bad dir")
     }
 
-    val solution = puzzle {
+    val solution = solution {
 
         val parser = parser {
             buildMap {

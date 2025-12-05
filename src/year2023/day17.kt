@@ -29,7 +29,7 @@ object Day17 {
     private fun Input.move(dir: Direction) = Input(location + dir, dir, if (dir == direction) run + 1 else 1)
 
 
-    val solution = puzzle {
+    val solution = solution {
         val parser = parser {
             buildMap {
                 for ((y, line) in lines.withIndex()) for ((x, n) in line.withIndex()) put(x point y, n.digitToInt())
@@ -86,7 +86,7 @@ object Day17 {
     }
 
 
-    val dij = puzzle {
+    val dij = solution {
         data class State(val pos: IntPoint, val direction: Direction, val speed: Int) {
             fun move(dir: Direction) = State(pos + dir, dir, if (dir == direction) speed + 1 else 1)
         }
@@ -183,7 +183,7 @@ object Day17Alt {
         )
     }
 
-    val eph = puzzle {
+    val eph = solution {
         part1 {
             bfs(lines.mapNotNull { it.filter(('1'..'9')::contains).ifEmpty { null } },
                 ok = { true },

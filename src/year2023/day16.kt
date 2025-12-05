@@ -21,7 +21,7 @@ fun main() {
     )
 }
 
-private val solution = puzzle {
+private val solution = solution {
 
     val parser = parser {
         buildMap {

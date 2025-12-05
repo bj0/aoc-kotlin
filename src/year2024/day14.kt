@@ -29,7 +29,7 @@ object Day14 : Solutions {
         fun move(steps: Long = 1L) = pos + velocity * steps
     }
 
-    val solution = puzzle {
+    val solution = solution {
         val parser =
             lineParser { it.getLongList().let { (px, py, vx, vy) -> Bot(LongPoint(px, py), LongPoint(vx, vy)) } }
         part1(parser) { bots ->

@@ -22,7 +22,7 @@ fun main() {
 object Day20 {
 
 
-    val solution = puzzle {
+    val solution = solution {
 
 
         part1(Machines) { machines ->

@@ -44,7 +44,7 @@ fun main() {
 object Day5 : Solutions {
 
     // fastest, uses a map and a comparator
-    val comparator = puzzle {
+    val comparator = solution {
         val parser = parser {
             val (order, pages) = input.split("\n\n")
 
@@ -93,7 +93,7 @@ object Day5 : Solutions {
         }
     }
 
-    val recursion = puzzle {
+    val recursion = solution {
         val parser = parser {
             val (order, pages) = input.split("\n\n")
             order.lines().map { it.split("|") } to pages.lines().map { it.split(",") }
@@ -125,7 +125,7 @@ object Day5 : Solutions {
     }
 
     // original solution
-    val solution = puzzle {
+    val solution = solution {
         val parser = parser {
             val (order, pages) = input.split("\n\n")
             order.lines().map { it.split("|").let { (a, b) -> a to b } } to pages.lines().map { it.split(",") }

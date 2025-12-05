@@ -33,7 +33,7 @@ fun main() {
 object Day16 : Solutions {
     data class State(val pos: LongPoint, val dir: Direction)
 
-    val solution = puzzle {
+    val solution = solution {
         part1 {
             val grid = input.toGrid()
             val start = grid.find { _, c -> c == 'S' }!!
@@ -98,7 +98,7 @@ object Day16 : Solutions {
         }
     }
 
-    val dj = puzzle {
+    val dj = solution {
         data class State(val pos: LongPoint, val dir: Direction)
         part2 {
             val grid = input.toGrid()

@@ -20,7 +20,7 @@ fun main() {
 object Day11 : Solutions {
 
     // this method is too slow for part2
-    val solution = puzzle {
+    val solution = solution {
         part1 {
             val stones = input.getLongList().asSequence()
 
@@ -43,7 +43,7 @@ object Day11 : Solutions {
         }
     }
 
-    val map = puzzle {
+    val map = solution {
         // this is maybe 1ms faster than the shorter one
 //        fun blink(stone: Long): List<Long> =
 //            when (stone) {
@@ -107,7 +107,7 @@ object Day11 : Solutions {
 
     }
 
-    val recursion = puzzle {
+    val recursion = solution {
         fun blink(stone: Long, times: Int, seen: MutableMap<Pair<Long, Int>, Long>): Long {
             fun innerBlink(stone: Long, steps: Int): Long {
                 seen[stone to steps]?.let { return it }
@@ -139,7 +139,7 @@ object Day11 : Solutions {
         }
     }
 
-    val other = puzzle {
+    val other = solution {
         fun Long.blink(times: Long) =
 //            when {
 //                this == 0L -> listOf(1L to times)
@@ -196,7 +196,7 @@ object Day11 : Solutions {
         else -> f(this * 2024, -1L)
     }
 
-    val aok = puzzle {
+    val aok = solution {
         fun Map<Long, Long>.evolve(): Map<Long, Long> = buildMap(size * 2) {
             for ((stone, count) in this@evolve) {
                 fun add(next: Long) = put(next, getOrDefault(next, 0L) + count)

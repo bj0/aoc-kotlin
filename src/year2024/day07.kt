@@ -26,7 +26,7 @@ fun main() {
 
 object Day07 : Solutions {
 
-    val solution = puzzle {
+    val solution = solution {
         val parser = lineParser { it.split(":").let { (a, b) -> a.toLong() to b.getLongList() } }
 
         part1(parser) { lines ->
@@ -56,7 +56,7 @@ object Day07 : Solutions {
     }
 
 
-    val par = puzzle {
+    val par = solution {
         val parser = lineParser { it.split(":").let { (a, b) -> a.toLong() to b.getLongList() } }
 
         part1(parser) { lines ->

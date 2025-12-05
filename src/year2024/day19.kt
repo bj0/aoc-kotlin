@@ -33,7 +33,7 @@ object Day19 : Solutions {
 
     }
 
-    val solution = puzzle {
+    val solution = solution {
         part1 {
             val (first, second) = input.split("\n\n")
             val towels = first.split(", ").toSet()
@@ -58,7 +58,7 @@ object Day19 : Solutions {
 //        }
     }
 
-    val cached = puzzle {
+    val cached = solution {
         val parser = parser {
             val (first, second) = input.split("\n\n")
             second.lines() to first.split(", ").toList()

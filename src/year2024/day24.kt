@@ -93,7 +93,7 @@ object Day24 : Solutions {
         else -> error("bad op $op")
     }
 
-    val solution = puzzle {
+    val solution = solution {
         part1 {
             val (i0, g0) = input.split("\n\n")
             val io = i0.lines().map { it.split(": ").let { (a, b) -> a to b.toInt() } }.toMap().toMutableMap()

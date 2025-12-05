@@ -1,6 +1,6 @@
 package year2023
 
-import util.puzzle
+import util.solution
 import util.solveAll
 
 fun main() {
@@ -34,7 +34,7 @@ object Day25 {
 
     infix fun String.edge(other: String) = if (this < other) Edge(this, other) else Edge(other, this)
 
-    val solution = puzzle {
+    val solution = solution {
         part1 {
             val edges = mutableListOf<Edge>()
             val wires = buildMap {

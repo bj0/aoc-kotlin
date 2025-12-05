@@ -1,7 +1,5 @@
 package year2024
 
-import arrow.fx.coroutines.parMap
-import kotlinx.coroutines.Dispatchers
 import util.*
 
 fun main() {
@@ -26,7 +24,7 @@ fun main() {
 
 object Day10 : Solutions {
 
-    val sequence = puzzle {
+    val sequence = solution {
         part2 {
             val map = lines.map { line -> line.map { it.digitToInt() } }.toGrid()
             val starts = map.findAll { _, c -> c == 0 }
@@ -42,7 +40,7 @@ object Day10 : Solutions {
         }
     }
 
-    val dij = puzzle {
+    val dij = solution {
         part2 {
             val map = lines.map { line -> line.map { it.digitToInt() } }.toGrid()
             val starts = map.findAll { _, c -> c == 0 }
@@ -61,7 +59,7 @@ object Day10 : Solutions {
         }
     }
 
-    val sequenceScope = puzzle {
+    val sequenceScope = solution {
         part2 {
             val map = lines.map { line -> line.map { it.digitToInt() } }.toGrid()
             val starts = map.findAll { _, c -> c == 0 }
@@ -78,7 +76,7 @@ object Day10 : Solutions {
         }
     }
 
-    val recursion = puzzle {
+    val recursion = solution {
         part2 {
             val map = lines.map { line -> line.map { it.digitToInt() } }.toGrid()
             val starts = map.findAll { _, c -> c == 0 }
@@ -95,7 +93,7 @@ object Day10 : Solutions {
     }
 
 
-    val loop = puzzle {
+    val loop = solution {
         part1 {
             val map = lines.map { line -> line.map { it.digitToInt() } }.toGrid()
             val starts = map.findAll { _, c -> c == 0 }

@@ -4,7 +4,7 @@ package year2023
 
 import arrow.core.fold
 import util.getInts
-import util.puzzle
+import util.solution
 import util.solveAll
 
 
@@ -35,7 +35,7 @@ object Day19 {
     }
 
 
-    val solution = puzzle {
+    val solution = solution {
 
         val parser = parser {
             input.split("\n\n")
@@ -104,7 +104,7 @@ object Day19 {
         }
     }
 
-    val alt = puzzle {
+    val alt = solution {
         val parser = parser {
             input.split("\n\n")
                 .let { split ->

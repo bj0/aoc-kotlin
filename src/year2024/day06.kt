@@ -64,7 +64,7 @@ object Day6 : Solutions {
         }
     }
 
-    val sequence = puzzle {
+    val sequence = solution {
         val parser = parser {
             lines.toMapGrid().let { grid -> grid to grid.findAll { _, c -> c == '#' } }
         }
@@ -81,7 +81,7 @@ object Day6 : Solutions {
         }
     }
 
-    val parallel = puzzle {
+    val parallel = solution {
         val parser = parser {
             lines.toMapGrid().let { grid -> grid to grid.findAll { _, c -> c == '#' } }
         }
@@ -98,7 +98,7 @@ object Day6 : Solutions {
         }
     }
 
-    val original = puzzle {
+    val original = solution {
         fun walk(
             grid: Grid<Char>,
             start: LongPoint,

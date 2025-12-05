@@ -2,15 +2,15 @@
 
 package year2023
 
-import util.puzzle
+import util.solution
 import util.solveAll
 import util.transpose
 
 fun main() {
-    listOf(::solution, ::`first try`).solveAll()
+    listOf(::sol, ::`first try`).solveAll()
 }
 
-private val solution = puzzle {
+private val sol = solution {
     // this assumes only a single mirror line
     fun List<String>.findMirror(eq: List<String>.(List<String>) -> Boolean): Int =
         (1..lastIndex).find { n -> take(n).asReversed().eq(drop(n)) } ?: 0
@@ -34,7 +34,7 @@ private val solution = puzzle {
     }
 }
 
-private val `first try` = puzzle {
+private val `first try` = solution {
     infix fun String.diff(other: String) = this.withIndex().count { (i, c) -> c != other[i] }
 
     fun List<String>.check(idx: Int) =

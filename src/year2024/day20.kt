@@ -31,7 +31,7 @@ fun main() {
 
 object Day20 : Solutions {
 
-    val better = puzzle {
+    val better = solution {
         val parser = parser {
             val grid = lines.toMapGrid()
             val start = grid.find { _, c -> c == 'S' }!!
@@ -68,7 +68,7 @@ object Day20 : Solutions {
     data class Cheat(val frm: LongPoint, val to: LongPoint)
     data class State(val pos: LongPoint, val time: Int, val cheat: Cheat?)
 
-    val solution = puzzle {
+    val solution = solution {
         part1 {
             val grid = lines.toMapGrid()
 

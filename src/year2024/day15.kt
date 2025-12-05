@@ -170,7 +170,7 @@ object Day15 : Solutions {
         override fun toString() = "$location"
     }
 
-    val solution = puzzle {
+    val solution = solution {
         part1 {
             val (map, dirsList) = input.split("\n\n")
             val grid = map.lines().toMapGrid()

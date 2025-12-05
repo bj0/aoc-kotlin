@@ -15,7 +15,7 @@ object Day3 : Solutions {
     private const val DONT = """don't\(\)"""
 
 
-    val solution = puzzle {
+    val solution = solution {
         part1 {
             MUL.toRegex().findAll(input)
                 .sumOf { it.value.getIntList().product() }
@@ -34,7 +34,7 @@ object Day3 : Solutions {
         }
     }
 
-    val fold = puzzle {
+    val fold = solution {
         part2 {
             """($MUL|$DONT|$DO)""".toRegex().findAll(input)
                 .fold(true to 0) { (on, s), m ->
@@ -47,7 +47,7 @@ object Day3 : Solutions {
         }
     }
 
-    val recursive = puzzle {
+    val recursive = solution {
         part2 {
             tailrec fun munch(matches: List<MatchResult>, on: Boolean = true, sum: Int = 0): Int {
                 val res = matches.firstOrNull() ?: return sum
@@ -62,14 +62,14 @@ object Day3 : Solutions {
         }
     }
 
-    val trick = puzzle {
+    val trick = solution {
         part2 {
             """$DONT.*?($DO|$)|($MUL)""".toRegex(RegexOption.DOT_MATCHES_ALL).findAll(input)
                 .sumOf { m -> m.groupValues[2].getIntList().product() }
         }
     }
 
-    val trick2 = puzzle {
+    val trick2 = solution {
         part2 {
             """$DONT.*?($DO|$)|mul\((\d+),(\d+)\)""".toRegex(RegexOption.DOT_MATCHES_ALL).findAll(input)
                 .sumOf { m -> (m.groupValues[2].toIntOrNull() ?: 0) * (m.groupValues[3].toIntOrNull() ?: 0) }

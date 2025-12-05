@@ -4,7 +4,7 @@ import arrow.fx.coroutines.parMap
 import kotlinx.coroutines.Dispatchers
 import util.InputProvider
 import util.Solutions
-import util.puzzle
+import util.solution
 import util.solveAll
 
 fun main() {
@@ -40,7 +40,7 @@ object Day22 : Solutions {
 
 
     // also 20x faster
-    val cleaner = puzzle {
+    val cleaner = solution {
         // needs to be local for function reference?
         fun Long.evolve() = step { it * 64 }.step { it / 32 }.step { it * 2048 }
         fun String.genSecrets() = generateSequence(toLong(), Long::evolve).take(2001)
@@ -60,7 +60,7 @@ object Day22 : Solutions {
     }
 
 
-    val solution = puzzle {
+    val solution = solution {
         part1 {
             lines.parMap(Dispatchers.Default) {
                 var n = it.toLong()

@@ -3,9 +3,6 @@ package year2023
 import space.kscience.kmath.operations.Int64Field
 import space.kscience.kmath.operations.bufferAlgebra
 import space.kscience.kmath.operations.withSize
-import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.asBuffer
-import space.kscience.kmath.structures.first
 import util.*
 import kotlin.math.absoluteValue
 
@@ -37,7 +34,7 @@ fun main() {
 
 object Day18Test {
 
-    val kmath = puzzle {
+    val kmath = solution {
         with(Int64Field.bufferAlgebra.withSize(2)) {
             part1 {
                 var pos = zero
@@ -75,7 +72,7 @@ object Day18Test {
         }
     }
 
-    val newpoint = puzzle {
+    val newpoint = solution {
         part1 {
             with(LongPointScope) {
                 var pos = origin
@@ -117,7 +114,7 @@ object Day18Test {
 }
 
 object Day18 {
-    val solution = puzzle {
+    val solution = solution {
 
         part1 {
             val trench = buildList<IntPoint> {
@@ -159,7 +156,7 @@ object Day18 {
             .absoluteValue / 2 - trench.size / 2 + 1 + trench.size - 1
 
 
-    val faster = puzzle {
+    val faster = solution {
 
         part1 {
             var pos = IntPoint.Zero

@@ -8,7 +8,7 @@ fun main() {
     listOf(::solution, ::old).solveAll()
 }
 
-private val solution = puzzle {
+private val solution = solution {
     data class Game(val id: Int, val shown: List<Map<String, Int>>)
 
     val parser = lineParser { line ->
@@ -47,7 +47,7 @@ private val solution = puzzle {
     }
 }
 
-private val old = puzzle {
+private val old = solution {
     val parser = parser {
         val pat = """(\d+) (\w+),?""".toRegex()
         lines.mapIndexed { i, line ->

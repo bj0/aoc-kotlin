@@ -2,7 +2,7 @@ package year2024
 
 import util.InputProvider
 import util.Solutions
-import util.puzzle
+import util.solution
 import util.solveAll
 
 fun main() {
@@ -16,7 +16,7 @@ fun main() {
 }
 
 object Day09 : Solutions {
-    val solution = puzzle {
+    val solution = solution {
         part1 {
             // build pattern
             val list = sequence {

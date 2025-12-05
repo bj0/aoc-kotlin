@@ -38,7 +38,7 @@ object Day13 : Solutions {
         if (A > 0 && B > 0 && (A * a + B * b == prize)) A * 3 + B * 1 else 0
     }
 
-    val solution = puzzle {
+    val solution = solution {
         part1 {
             val machines = input.split("\n\n")
                 .map { m ->

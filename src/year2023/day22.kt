@@ -12,7 +12,7 @@ fun main() {
 
 object Day22 {
 
-    val solution = puzzle {
+    val solution = solution {
 
         val parser = parser {
             lines.map { line ->

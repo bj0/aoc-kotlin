@@ -35,7 +35,7 @@ object KSMT {
 
     data class Stone(val pos: LongPoint3, val vel: LongPoint3)
 
-    val solution = puzzle {
+    val solution = solution {
         val parser3 = lineParser { line ->
             line.split(" @ ").let { (a, b) ->
                 Stone(
@@ -82,7 +82,7 @@ object KSMT {
 }
 
 object Day24 {
-    val solution = puzzle {
+    val solution = solution {
         part1 {
             val stones = lines.map {
                 it.split(" @ ").let { (a, b) ->
@@ -106,7 +106,7 @@ object Day24 {
 
     }
 
-    val eliz = puzzle {
+    val eliz = solution {
         // roman elizarov's golf'd solution
         part2 {
             val a = lines.map { s -> s.split("@").map { vs -> vs.split(",").map { it.trim().toLong() } } }
@@ -127,7 +127,7 @@ object Day24 {
         }
     }
 
-    val math = puzzle {
+    val math = solution {
         // haven't got this to work
         val parser = lineParser { line ->
             line.split(" @ ").let { (a, b) ->
@@ -146,7 +146,7 @@ object Day24 {
         }
     }
 
-    val iter = puzzle {
+    val iter = solution {
         part2 {
             // this works if the right initial stones are picked, and when it works, it works fast.  keep repeating until it works
             val hailStones = lines.map { it.split(" @ ").let { (p, v) -> HailStone(Point3d(p), Point3d(v)) } }

@@ -30,7 +30,7 @@ value class Table(val map: List<String>) {
 
 }
 
-private val faster = puzzle {
+private val faster = solution {
 
     val parser = parser { Table(lines) }
 
@@ -77,7 +77,7 @@ private val faster = puzzle {
     }
 }
 
-private val aok = puzzle {
+private val aok = solution {
     fun CharArray.rollRight() {
         var start = 0
         for (idx in indices) if (this[idx] == '#') {
@@ -113,7 +113,7 @@ private val aok = puzzle {
     }
 }
 
-private val solution = puzzle {
+private val solution = solution {
 
     val parser = parser { Table(lines) }
 
@@ -172,7 +172,7 @@ private val solution = puzzle {
 }
 
 private
-val `first try` = puzzle {
+val `first try` = solution {
 
     val parser = parser {
         buildMap {

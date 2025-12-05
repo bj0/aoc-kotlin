@@ -54,7 +54,7 @@ fun main() {
 
 object Day25 : Solutions {
 
-    val solution = puzzle {
+    val solution = solution {
         part1 {
             val (keys,locks) = input.split("\n\n").map { it.lines().toMapGrid().filterValues { it == '#' } }.partition { (0L point 0) in it }
 

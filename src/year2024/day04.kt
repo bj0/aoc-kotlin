@@ -37,7 +37,7 @@ fun main() {
 }
 
 object Day4 : Solutions {
-    val grid = puzzle {
+    val grid = solution {
         val parser = parser { input.toGrid() }
 
         part1(parser) { grid ->
@@ -90,7 +90,7 @@ object Day4BruteForce : Solutions {
     }
 
     // first try, very ugly
-    val solution = puzzle {
+    val solution = solution {
         part1 {
             val w = lines[0].length
             val h = lines.size

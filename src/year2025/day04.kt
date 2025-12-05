@@ -1,12 +1,10 @@
 package year2025
 
-import kotlinx.coroutines.yield
 import util.Grid
 import util.InputProvider
 import util.Solutions
-import util.debug
 import util.neighbors
-import util.puzzle
+import util.solution
 import util.solveAll
 import util.toMapGrid
 import kotlin.collections.plus
@@ -38,7 +36,7 @@ object Day4 : Solutions {
                 if (i == 0 && j == 0) continue else yield((c + i) to (r + j))
     }
 
-    val first = puzzle {
+    val first = solution {
         part1 {
             val map = buildMap {
                 lines.withIndex().forEach { (r, row) ->
@@ -77,7 +75,7 @@ object Day4 : Solutions {
         }
     }
 
-    val grid = puzzle {
+    val grid = solution {
         val parser = parser { lines.toMapGrid() }
 
         part1(parser) { grid ->

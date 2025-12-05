@@ -9,7 +9,7 @@ fun main() {
 }
 
 object Day18 : Solutions {
-    val solution = puzzle {
+    val solution = solution {
         part1 {
             val width = 70L
             val height = width

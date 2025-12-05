@@ -31,7 +31,7 @@ fun main() {
 }
 
 object Day12 : Solutions {
-    val solution = puzzle {
+    val solution = solution {
         fun walk(
             map: Map<LongPoint, Char>,
             cur: LongPoint,
@@ -119,7 +119,7 @@ object Day12 : Solutions {
         }
     }
 
-    val cleanedUp = puzzle {
+    val cleanedUp = solution {
         // generic bfs walk, return visited points
         fun <T> walk(
             start: T,
@@ -218,7 +218,7 @@ object Day12 : Solutions {
         }
     }
 
-    val sequence = puzzle {
+    val sequence = solution {
         // generic bfs walk, return visited points
         fun <T> walk(
             start: T,
@@ -321,7 +321,7 @@ object Day12 : Solutions {
     }
 
     // slower
-    val classes = puzzle {
+    val classes = solution {
         fun walk(map: Map<LongPoint, Char>, start: LongPoint) = sequence {
             val seen = mutableSetOf<LongPoint>()
             suspend fun SequenceScope<Any>.rec(cur: LongPoint) {

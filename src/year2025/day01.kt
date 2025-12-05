@@ -2,7 +2,7 @@ package year2025
 
 import util.InputProvider
 import util.Solutions
-import util.puzzle
+import util.solution
 import util.solveAll
 
 
@@ -28,7 +28,7 @@ fun main() {
 }
 
 object Day1 : Solutions {
-    val first = puzzle {
+    val first = solution {
         part1 { ->
             lines.runningFold(50) { s, op ->
                 (s + when (op[0]) {
@@ -57,7 +57,7 @@ object Day1 : Solutions {
         }
     }
 
-    val first2 = puzzle{
+    val first2 = solution{
         part2 {
             lines.fold(50 to 0) { (pos, oldCount), op ->
                 val newPos = (pos + when (op[0]) {
@@ -76,7 +76,7 @@ object Day1 : Solutions {
         }
     }
 
-    val brute = puzzle {
+    val brute = solution {
         part2 {
             lines.runningFold(50 to 0) { (s, s0), op ->
                 (s.mod(100) + when (op[0]) {
@@ -94,7 +94,7 @@ object Day1 : Solutions {
         }
     }
 
-    val pd = puzzle {
+    val pd = solution {
         part2 {
             var dial = 50
             var password = 0

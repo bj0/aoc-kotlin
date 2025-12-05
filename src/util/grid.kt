@@ -35,8 +35,7 @@ data class MapGrid<T>(val data: Map<LongPoint, T>, override val xRange: LongRang
 }
 
 @JvmInline
-value class StringGrid(val data: List<String>) :
-    Grid<Char> {
+value class StringGrid(val data: List<String>) : Grid<Char> {
     override val xRange get() = 0L..<data.maxOf { it.length }
     override val yRange get() = 0L..<data.size
 

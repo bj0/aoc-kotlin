@@ -2,7 +2,7 @@ package year2025
 
 import util.InputProvider
 import util.Solutions
-import util.puzzle
+import util.solution
 import util.solveAll
 
 
@@ -21,7 +21,7 @@ fun main() {
 }
 
 object Day3 : Solutions {
-    val first = puzzle {
+    val first = solution {
         part1 {
             lines.sumOf { line ->
                 val (idx, max) = line.dropLast(1).withIndex().maxBy { it.value }
@@ -41,7 +41,7 @@ object Day3 : Solutions {
         }
     }
 
-    val tailrec = puzzle {
+    val tailrec = solution {
         part2 {
             tailrec fun String.findMax(n: Int, jolts: Long = 0): Long {
                 if (n == 0) return jolts
@@ -54,7 +54,7 @@ object Day3 : Solutions {
         }
     }
 
-    val seq = puzzle {
+    val seq = solution {
         part2 {
             lines.sumOf { line ->
                 (12 downTo 1).fold("" to line) { (m, left), i ->

@@ -100,7 +100,7 @@ object Day21 : Solutions {
         error("no path")
     })
 
-    val cleanup = puzzle {
+    val cleanup = solution {
         fun solve(code: String, pads: Int = 2): Long {
             return "A$code".zipWithNext { from, to ->
                 State(from, to, pads).pressCount(keypad)
@@ -138,7 +138,7 @@ object Day21 : Solutions {
         }.second
     })
 
-    val dij = puzzle {
+    val dij = solution {
         fun solve(code: String, pads: Int = 2): Long {
             return "A$code".zipWithNext { from, to ->
                 State(from, to, pads).pressCountDij(keypad)
@@ -156,7 +156,7 @@ object Day21 : Solutions {
     }
 
     // 4th tries the charm!
-    val try4 = puzzle {
+    val try4 = solution {
         val keypad = """
                 789
                 456
@@ -306,7 +306,7 @@ object Day21 : Solutions {
         }
     }.joinToString("", postfix = "A")
 
-    val other = puzzle {
+    val other = solution {
         part1 {
             lines.solve(2)
         }

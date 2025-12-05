@@ -33,7 +33,6 @@ fun <K, V> mapParser(mapper: MutableMap<K, V>.(line: String) -> Any?) =
 @SolutionDsl
 interface SolutionsScope<P1, P2> {
     fun <R> parser(block: Parser<R>) = block
-    fun <R> lineParser(mapper: (line: String) -> R) = util.lineParser(mapper)
 
     @SolutionDsl
     fun part1(solution: Solution<P1>)
@@ -74,7 +73,7 @@ private operator fun <P1, P2> PuzzleDefinition<P1, P2>.provideDelegate(thisRef: 
     part1 to part2
 }
 
-fun puzzle(body: PuzzleDefinition<*, *>): Puzzle<out Any?, out Any?> {
+fun solution(body: PuzzleDefinition<*, *>): Puzzle<out Any?, out Any?> {
     val solution by body
     return Puzzle(solution.first, solution.second)
 }

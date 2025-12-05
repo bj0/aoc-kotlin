@@ -26,7 +26,7 @@ fun main() {
 
 object Day21 {
 
-    val patterns = puzzle {
+    val patterns = solution {
         val parser = parser {
             var start = 0 point 0
             buildSet {
@@ -117,7 +117,7 @@ object Day21 {
         }
     }
 
-    val fit = puzzle {
+    val fit = solution {
         val parser = parser {
             var start = 0 point 0
             buildSet {
@@ -184,7 +184,7 @@ object Day21 {
     }
 
 
-    val corners = puzzle {
+    val corners = solution {
         val parser = parser {
             var start = 0 point 0
             buildSet {
@@ -237,7 +237,7 @@ object Day21 {
     }
 
 
-    val alt = puzzle {
+    val alt = solution {
         // trying to get total manhattan distance minus number of #s enclosed, doesn't work, close but always off by a little bit
         // probably because im assuming all spots are reachable but some could be blocked off by other blocks.
         part2 {

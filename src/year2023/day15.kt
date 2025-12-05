@@ -8,7 +8,7 @@ fun main() {
     listOf(::solution).solveAll()
 }
 
-private val solution = puzzle {
+private val solution = solution {
 
     fun String.hash() = fold(0) { acc, c -> (acc + c.code) * 17 % 256 }
 

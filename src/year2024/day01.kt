@@ -2,7 +2,7 @@ package year2024
 
 import util.Solutions
 import util.getIntList
-import util.puzzle
+import util.solution
 import util.solveAll
 import kotlin.math.abs
 import kotlin.math.absoluteValue
@@ -14,7 +14,7 @@ fun main() {
 
 object Day1 : Solutions {
     // cleaned up solution
-    val cleaner = puzzle {
+    val cleaner = solution {
         val parser = parser {
             lines.map { line -> line.getIntList().let { it.first() to it.last() } }.unzip()
         }
@@ -30,7 +30,7 @@ object Day1 : Solutions {
     }
 
     // try with groupBy
-    val group = puzzle {
+    val group = solution {
         part2 {
             lines.map { line -> line.getIntList().let { it.first() to it.last() } }.unzip()
                 .let { (left, right) ->
@@ -41,7 +41,7 @@ object Day1 : Solutions {
     }
 
     // original solution
-    val solution = puzzle {
+    val solution = solution {
         // 2430334
         part1 {
             val lists = lines.map { it.getIntList() }

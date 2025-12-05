@@ -94,7 +94,7 @@ object Day23 : Solutions {
 //        }
 //    }
 
-    val solution = puzzle {
+    val solution = solution {
         part1 {
             val map = lines.flatMap { it.split("-").let { (a, b) -> listOf(a to b, b to a) } }.groupBy { it.first }
                 .mapValues { it.value.map { it.second }.toSet() }
@@ -157,7 +157,7 @@ object Day23 : Solutions {
         }
     }
 
-    val eph = puzzle {
+    val eph = solution {
         part2 {
             // use proper ordering to avoid loops (caching is still faster)
             val map =
@@ -182,7 +182,7 @@ object Day23 : Solutions {
     }
 
     // misses an edge case
-    val aok = puzzle {
+    val aok = solution {
         part2 {
             fun String.network() = buildMap {
                 fun add(k: String, v: String) =
@@ -215,7 +215,7 @@ object Day23 : Solutions {
         }
     }
 
-    val aok2 = puzzle {
+    val aok2 = solution {
         part2 {
             fun String.network() = buildMap {
                 fun add(k: String, v: String) =

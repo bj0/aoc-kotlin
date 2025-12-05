@@ -8,7 +8,7 @@ fun main() {
 }
 
 object Day1 {
-    val regex = puzzle {
+    val regex = solution {
         // using regex
         part1 {
             lines.sumOf { line -> "${line.first { it.isDigit() }}${line.last { it.isDigit() }}".toInt() }
@@ -34,7 +34,7 @@ object Day1 {
         }
     }
 
-    val easier = puzzle {
+    val easier = solution {
         part2 {
             // manipulate input to make search easier
             val words = mapOf(

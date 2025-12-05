@@ -7,7 +7,7 @@ fun main() {
 }
 
 object Day17 : Solutions {
-    val recursion = puzzle {
+    val recursion = solution {
         fun machine(a: Long, ops: List<Pair<Int, Int>>): List<Int> {
             var a = a
             var b = 0L
@@ -67,7 +67,7 @@ object Day17 : Solutions {
             find(prog)
         }
     }
-    val sequence = puzzle {
+    val sequence = solution {
         fun machine(a: Long, b: Long, c: Long, ops: List<Pair<Long, Int>>): Sequence<Long> {
             var a = a
             var b = b
@@ -124,7 +124,7 @@ object Day17 : Solutions {
         }
     }
 
-    val list = puzzle {
+    val list = solution {
         fun machine(a: Long, b: Long, c: Long, ops: List<Pair<Long, Int>>): List<Long> {
             var a = a
             var b = b
