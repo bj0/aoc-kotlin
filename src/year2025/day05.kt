@@ -2,7 +2,9 @@ package year2025
 
 import util.InputProvider
 import util.Solutions
-import util.puzzle
+import util.merge
+import util.solution
+import util.size
 import util.solveAll
 import kotlin.math.max
 
@@ -30,7 +32,7 @@ fun main() {
 object Day5 : Solutions {
 
 
-    val first = puzzle {
+    val first = solution {
         part1 {
             val (freshRanges, idList) = input.split("\n\n")
             val fresh = freshRanges.lines().map { line -> line.split("-").map { it.toLong() }.let { (a, b) -> a..b } }
@@ -56,7 +58,7 @@ object Day5 : Solutions {
         }
     }
 
-    val tailrec = puzzle {
+    val tailrec = solution {
 
         part2 {
             tailrec fun countFresh(ranges: List<LongRange>, oldCount: Long = 0, lastEnd: Long = 0): Long {
@@ -69,12 +71,20 @@ object Day5 : Solutions {
                 return if (nextRanges.isEmpty()) count else countFresh(nextRanges, count, end)
             }
 
-            val (fstring, idstring) = input.split("\n\n")
-            val fresh = fstring.lines().map { line -> line.split("-").map { it.toLong() }.let { (a, b) -> a..b } }
+            val (freshRanges, idList) = input.split("\n\n")
+            val fresh = freshRanges.lines().map { line -> line.split("-").map { it.toLong() }.let { (a, b) -> a..b } }
                 .sortedBy { it.first }
 
 
             countFresh(fresh)
+        }
+    }
+
+    val fold = solution {
+        part2 {
+            val (freshRanges, idList) = input.split("\n\n")
+            val fresh = freshRanges.lines().map { line -> line.split("-").map { it.toLong() }.let { (a, b) -> a..b } }
+            fresh.merge().sumOf { it.size }
         }
     }
 }
