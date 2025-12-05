@@ -2,10 +2,7 @@ package year2024
 
 import arrow.fx.coroutines.parMap
 import kotlinx.coroutines.Dispatchers
-import util.InputProvider
-import util.Solutions
-import util.solution
-import util.solveAll
+import util.*
 
 fun main() {
     Day22.solveAll(

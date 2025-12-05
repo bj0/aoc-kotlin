@@ -1,31 +1,32 @@
 # Produce a JVM library
 product:
-  type: lib
-  platforms: [ jvm ]
+  type: jvm/app
+#  platforms: [ jvm ]
 
 
 settings:
   kotlin:
     serialization: json
     freeCompilerArgs:
-      - "-Xcontext-receivers"
+      - "-Xcontext-parameters"
+      - "-Xcontext-sensitive-resolution"
+      - "-Xnested-type-aliases"
 
 
 dependencies:
-  - org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0
-  - io.arrow-kt:arrow-core:1.2.4
-  - io.arrow-kt:arrow-fx-coroutines:1.2.4
-  #  - io.github.rchowell:dotlin:1.0.2
+  - org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2
+  - io.arrow-kt:arrow-core:2.2.0
+  - io.arrow-kt:arrow-fx-coroutines:2.2.0
   - io.ksmt:ksmt-core:0.5.26
   - io.ksmt:ksmt-z3:0.5.26
   - $kotlin.reflect
   - space.kscience:kmath-core:0.4.0
-  - org.jetbrains.kotlinx:kotlinx-datetime:0.6.1
+  - org.jetbrains.kotlinx:kotlinx-datetime:0.7.1
   - com.akuleshov7:ktoml-file:0.5.2
   - com.akuleshov7:ktoml-core:0.5.2
 
 
 
-repositories:
-  - https://oss.sonatype.org/content/repositories/snapshots
-  - https://repo.kotlin.link
+#repositories:
+#  - https://oss.sonatype.org/content/repositories/snapshots
+#  - https://repo.kotlin.link

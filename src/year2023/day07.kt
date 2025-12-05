@@ -2,6 +2,8 @@ package year2023
 
 import util.PuzDSL
 import util.lineParser
+import util.part1
+import util.part2
 import util.solveAll
 
 fun main() {

@@ -2,9 +2,7 @@
 
 package year2023
 
-import util.solution
-import util.solveAll
-import util.transpose
+import util.*
 
 fun main() {
     listOf(::sol, ::`first try`).solveAll()

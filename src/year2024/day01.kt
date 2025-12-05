@@ -1,12 +1,8 @@
 package year2024
 
-import util.Solutions
-import util.getIntList
-import util.solution
-import util.solveAll
+import util.*
 import kotlin.math.abs
 import kotlin.math.absoluteValue
-
 
 fun main() {
     Day1.solveAll()

@@ -1,5 +1,6 @@
 package year2023
 
+import util.part1
 import util.solution
 import util.solveAll
 
@@ -48,7 +49,7 @@ object Day25 {
                 }
             }
 
-            fun sizeWithout( edges: List<Edge>): Int {
+            fun sizeWithout(edges: List<Edge>): Int {
                 val seen = mutableSetOf<String>()
                 val start = wires.keys.first()
                 val q = ArrayDeque(listOf(start))

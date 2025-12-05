@@ -1,9 +1,6 @@
 package year2025
 
-import util.InputProvider
-import util.Solutions
-import util.solution
-import util.solveAll
+import util.*
 
 
 fun main() {
@@ -57,7 +54,7 @@ object Day1 : Solutions {
         }
     }
 
-    val first2 = solution{
+    val first2 = solution {
         part2 {
             lines.fold(50 to 0) { (pos, oldCount), op ->
                 val newPos = (pos + when (op[0]) {

@@ -3,6 +3,8 @@ package year2025
 import util.InputProvider
 import util.Solutions
 import util.merge
+import util.part1
+import util.part2
 import util.solution
 import util.size
 import util.solveAll

@@ -174,8 +174,8 @@ object Day23 {
         } else Edge(other, this)
     }
 
-    context(Map<IntPoint, Char>)
+    context(m:Map<IntPoint, Char>)
     val IntPoint.next
-        get() = Direction.entries.map { d -> this + d }.filter { get(it)?.let { c -> c != '#' } == true }
+        get() = Direction.entries.map { d -> this + d }.filter { m.get(it)?.let { c -> c != '#' } == true }
 }
 

@@ -1,13 +1,6 @@
 package year2025
 
-import util.Grid
-import util.InputProvider
-import util.Solutions
-import util.neighbors
-import util.solution
-import util.solveAll
-import util.toMapGrid
-import kotlin.collections.plus
+import util.*
 
 fun main() {
     Day4.solveAll(

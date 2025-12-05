@@ -3,9 +3,7 @@
 package year2023
 
 import arrow.core.fold
-import util.getInts
-import util.solution
-import util.solveAll
+import util.*
 
 
 fun main() {

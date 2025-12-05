@@ -14,11 +14,12 @@ import kotlin.time.measureTimedValue
 annotation class SolutionDsl
 
 fun interface Parser<T> {
-    context(PuzzleInput)
+    context(_: PuzzleInput)
     fun parse(): T
 
     fun <R> map(f: (T) -> R) = Parser { f(parse()) }
-    context(PuzzleInput)
+
+    context(_: PuzzleInput)
     operator fun invoke() = parse()
 
     operator fun invoke(input: String) = with(PuzzleInput.of(input)) { parse() }
@@ -49,7 +50,7 @@ interface SolutionsScope<P1, P2> {
 
 @SolutionDsl
 fun interface PuzzleDefinition<P1, P2> {
-    context(SolutionsScope<P1, P2>) fun build()
+    context(_: SolutionsScope<P1, P2>) fun build()
 }
 
 @SolutionDsl
@@ -80,20 +81,21 @@ fun solution(body: PuzzleDefinition<*, *>): Puzzle<out Any?, out Any?> {
 
 
 class Puzzle<P1, P2>(private val solution1: Solution<P1>, private val solution2: Solution<P2>) {
-    context(PuzzleInput)
-    suspend fun part1() = with(solution1) { solve() }
+    context(pi: PuzzleInput)
+    suspend fun part1() = with(solution1) { pi.solve() }
 
-    context(PuzzleInput)
-    suspend fun part2() = with(solution2) { solve() }
+    context(pi: PuzzleInput)
+    suspend fun part2() = with(solution2) { pi.solve() }
 }
 
 abstract class PuzDSL(body: PuzzleDefinition<*, *>) {
     private val solutions by body
-    context(PuzzleInput)
-    suspend fun part1() = with(solutions.first) { solve() }
 
-    context(PuzzleInput)
-    suspend fun part2() = with(solutions.second) { solve() }
+    context(pi: PuzzleInput)
+    suspend fun part1() = with(solutions.first) { pi.solve() }
+
+    context(pi: PuzzleInput)
+    suspend fun part2() = with(solutions.second) { pi.solve() }
 }
 
 fun KProperty0<Puzzle<*, *>>.solve(
@@ -106,6 +108,7 @@ fun List<KProperty0<Puzzle<*, *>>>.solveAll(input: InputProvider = InputProvider
 
 // use reflection to pull out the solutions from an object
 interface Solutions
+
 fun <T : Solutions> T.solveAll(input: InputProvider = InputProvider.Default) {
     val solutions = this::class.memberProperties.filter {
         it.returnType.isSubtypeOf(typeOf<Puzzle<*, *>>())
@@ -139,11 +142,11 @@ fun Iterable<PuzDSL>.solveAll(
     input: InputProvider = InputProvider.Default
 ) = with(input) { map { it.resolvePuzzle() }.solveAll() }
 
-context(InputProvider)
+context(ip: InputProvider)
 fun Iterable<Puz<*, *>>.solveAll(runIterations: Int = 1) =
     sortedWith(compareBy<Puz<*, *>> { it.year }.thenBy { it.day })
         .groupBy { it.year to it.day }.forEach { (year, day), puzzles ->
-            with(forPuzzle(year, day)) {
+            with(ip.forPuzzle(year, day)) {
                 fun runPart(part: Puz<*, *>.() -> Any?) {
                     val results = puzzles.map { puz ->
                         puz.variant to runCatching {

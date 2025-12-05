@@ -1,7 +1,6 @@
 package year2023
 
-import util.PuzDSL
-import util.solveAll
+import util.*
 import year2023.Day10.down
 import year2023.Day10.neighbors
 import year2023.Day10.right
@@ -139,8 +138,8 @@ object Day10 : PuzDSL({
     val Point.down get() = copy(y = y + 1)
 
 
-    context(Plan)
-    fun Point.steps(): Set<Point> = when (map[this] ?: '.') {
+    context(p: Plan)
+    fun Point.steps(): Set<Point> = when (p.map[this] ?: '.') {
         '|' -> setOf(up, down)
         '-' -> setOf(left, right)
         'L' -> setOf(up, right)
@@ -246,8 +245,8 @@ object Day10WithQueues : PuzDSL({
     val Point.down get() = copy(y = y + 1)
 
 
-    context(Plan)
-    fun Point.steps(): List<Point> = when (map[this] ?: '.') {
+    context(p: Plan)
+    fun Point.steps(): List<Point> = when (p.map[this] ?: '.') {
         '|' -> listOf(up, down)
         '-' -> listOf(left, right)
         'L' -> listOf(up, right)

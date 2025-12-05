@@ -4,10 +4,7 @@ import arrow.core.MemoizedDeepRecursiveFunction
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
-import util.CachedRecursiveFunction
-import util.PuzDSL
-import util.cachedDeepRecursiveFunction
-import util.solveAll
+import util.*
 
 fun main() {
 //    listOf(Day12, Day12DRF).solveAll(

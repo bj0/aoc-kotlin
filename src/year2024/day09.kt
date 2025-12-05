@@ -1,9 +1,6 @@
 package year2024
 
-import util.InputProvider
-import util.Solutions
-import util.solution
-import util.solveAll
+import util.*
 
 fun main() {
     Day09.solveAll(

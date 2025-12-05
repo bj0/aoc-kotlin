@@ -1,6 +1,10 @@
 package year2023
 
 import util.PuzDSL
+import util.lines
+import util.parser
+import util.part1
+import util.part2
 import util.solveAll
 import year2023.Day03.findNumber
 import year2023.Day03.neighbors
@@ -51,11 +55,14 @@ object Day03 : PuzDSL({
     operator fun Point.minus(other: Point) = this + (-other)
     data class Grid<T>(val data: Map<Point, T>)
 
+    context(g: Grid<Char>)
+    val data get() = g.data
+
     fun <T> Grid<T>.find(item: T): Sequence<Point> = sequence {
         yieldAll(data.keys.filter { data[it] == item })
     }
 
-    context(Grid<Char>)
+    context(_:Grid<Char>)
     fun Point.neighbors() = sequence {
         (-1..1).forEach { i ->
             (-1..1).forEach { j ->
@@ -68,7 +75,7 @@ object Day03 : PuzDSL({
         }
     }
 
-    context(Grid<Char>)
+    context(_: Grid<Char>)
     fun findNumber(point: Point): Pair<Point, String>? {
         if (data[point]?.isDigit() != true)
             return null
@@ -104,3 +111,4 @@ object Day03AoK : PuzDSL({
         }.sum()
     }
 })
+

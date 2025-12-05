@@ -17,7 +17,7 @@ interface MathScope<T> {
 }
 
 interface PointScope<T, P : GPoint<T>> : MathScope<T> {
-    val origin get() = zero point zero
+    val origin: P get() = zero point zero
 
     fun newPoint(x: T, y: T): P
     infix fun T.point(y: T) = newPoint(this, y)
@@ -25,7 +25,7 @@ interface PointScope<T, P : GPoint<T>> : MathScope<T> {
     operator fun P.plus(p: P) = (x + p.x) point (y + p.y)
     operator fun T.times(p: P) = (this * p.x) point (this * p.y)
 
-    fun P.step(dir: Direction) = when (dir) {
+    fun P.step(dir: Direction): P = when (dir) {
         Direction.Left -> left
         Direction.Up -> up
         Direction.Right -> right
@@ -36,45 +36,45 @@ interface PointScope<T, P : GPoint<T>> : MathScope<T> {
 }
 
 
-context(MathScope<T>)
-operator fun <T> T.plus(other: T) = add(this, other)
+context(ms: MathScope<T>)
+operator fun <T> T.plus(other: T) = ms.add(this, other)
 
-context(MathScope<T>)
+context(ms: MathScope<T>)
 operator fun <T> T.minus(other: T) = this + (-other)
 
-context(MathScope<T>)
-operator fun <T> T.times(other: T) = multiply(this, other)
+context(ms: MathScope<T>)
+operator fun <T> T.times(other: T) = ms.multiply(this, other)
 
-context(MathScope<T>)
-operator fun <T> T.div(other: T) = divide(this, other)
+context(ms: MathScope<T>)
+operator fun <T> T.div(other: T) = ms.divide(this, other)
 
-context(MathScope<T>)
-operator fun <T> T.unaryMinus() = unaryMinus(this)
+context(ms: MathScope<T>)
+operator fun <T> T.unaryMinus() = ms.unaryMinus(this)
 
-context(MathScope<T>)
-operator fun <T> T.inc(): T = this + one
+context(ms: MathScope<T>)
+operator fun <T> T.inc(): T = this + ms.one
 
-context(MathScope<T>)
-operator fun <T> T.dec(): T = this - one
+context(ms: MathScope<T>)
+operator fun <T> T.dec(): T = this - ms.one
 
 interface GPoint<T> {
     val x: T
     val y: T
 }
 
-context(MathScope<T>)
+context(_: MathScope<T>)
 infix fun <T> GPoint<T>.mdist(other: GPoint<T>) = (other.x - x).absoluteValue + (other.y - y).absoluteValue
 
-context(PointScope<T, P>)
+context(_: PointScope<T, P>)
 val <T, P : GPoint<T>> P.up
     get() = x point y.dec()
-context(PointScope<T, P>)
+context(_: PointScope<T, P>)
 val <T, P : GPoint<T>> P.down
     get() = x point y.inc()
-context(PointScope<T, P>)
+context(_: PointScope<T, P>)
 val <T, P : GPoint<T>> P.left
     get() = x.dec() point y
-context(PointScope<T, P>)
+context(_: PointScope<T, P>)
 val <T, P : GPoint<T>> P.right
     get() = x.inc() point y
 

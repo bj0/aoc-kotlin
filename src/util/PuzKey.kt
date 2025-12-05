@@ -18,8 +18,8 @@ sealed interface PuzKey {
 }
 
 interface Puz<out P1, out P2> : PuzKey {
-    context(PuzzleInput) fun part1(): P1 = TODO()
-    context(PuzzleInput) fun part2(): P2 = TODO()
+    context(_: PuzzleInput) fun part1(): P1 = TODO()
+    context(_: PuzzleInput) fun part2(): P2 = TODO()
 }
 
 
@@ -34,11 +34,11 @@ fun PuzDSL.resolvePuzzle(): Puz<Any?, Any?> {
         override val day: Int = day
         override val variant: String = variant.takeIf { it.isNotEmpty() } ?: "Default"
 
-        context(PuzzleInput) override fun part1(): Any? =
+        context(_: PuzzleInput) override fun part1(): Any? =
             runBlocking { this@resolvePuzzle.part1() }
 
 
-        context(PuzzleInput) override fun part2(): Any? =
+        context(_: PuzzleInput) override fun part2(): Any? =
             runBlocking { this@resolvePuzzle.part2() }
 
         override fun toString() = "Puzzle[year=$year,day=$day,variant=$variant]"
@@ -51,11 +51,11 @@ fun <P1, P2> Puzzle<P1, P2>.resolvePuzzle(year: Int, day: Int, variant: String):
         override val day: Int = day
         override val variant: String = variant.takeIf { it.isNotEmpty() } ?: "Default"
 
-        context(PuzzleInput) override fun part1(): P1 =
+        context(_: PuzzleInput) override fun part1(): P1 =
             runBlocking { this@resolvePuzzle.part1() }
 
 
-        context(PuzzleInput) override fun part2(): P2 =
+        context(_: PuzzleInput) override fun part2(): P2 =
             runBlocking { this@resolvePuzzle.part2() }
 
         override fun toString() = "Puzzle[year=$year,day=$day,variant=$variant]"
