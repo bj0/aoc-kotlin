@@ -32,8 +32,6 @@ fun main() {
 }
 
 object Day5 : Solutions {
-
-
     val first = solution {
         part1 {
             val (freshRanges, idList) = input.split("\n\n")
@@ -61,7 +59,6 @@ object Day5 : Solutions {
     }
 
     val tailrec = solution {
-
         part2 {
             tailrec fun countFresh(ranges: List<LongRange>, oldCount: Long = 0, lastEnd: Long = 0): Long {
                 val first = ranges.first()
