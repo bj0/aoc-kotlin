@@ -24,9 +24,12 @@ dependencies:
   - org.jetbrains.kotlinx:kotlinx-datetime:0.7.1
   - com.akuleshov7:ktoml-file:0.5.2
   - com.akuleshov7:ktoml-core:0.5.2
+  - org.jetbrains.kotlinx:multik-core:0.2.3
+  - org.jetbrains.kotlinx:multik-default:0.2.3
+  - tools.aqua:z3-turnkey:4.12.2
 
 
 
-#repositories:
-#  - https://oss.sonatype.org/content/repositories/snapshots
-#  - https://repo.kotlin.link
+repositories:
+  - https://oss.sonatype.org/content/repositories/snapshots
+  - https://repo.kotlin.link
